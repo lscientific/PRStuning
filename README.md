@@ -104,9 +104,9 @@ param weight: weights of the PRS model to be evaluated, obtained from the traini
 
 param beta_EB: matrix of sampled empirical Bayes beta saved to the output directory from the GWEB.py (in Step2 above)
 
-param n0: training data sample size for control group
+param n0: training data control sample size
 
-param n1: training data sample size for case group
+param n1: training data case sample size
 
 param alignResult: aligned object saved to the output directory from GWEB.py (in Step2 above)
 
