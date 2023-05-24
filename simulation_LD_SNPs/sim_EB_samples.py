@@ -1,8 +1,8 @@
 
 import numpy as np
 import random
-from ...core_codes.GWEButils_cy import ebEst
-from ...core_codes.plinkLD import ldscore
+from ...GWEButils_cy import ebEst
+from ...plinkLD import ldscore
 
 from scipy import sparse
 import GWEButils
