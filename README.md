@@ -98,4 +98,11 @@ python GWEB.py --iprefix ./aligned/align_ --dir ./results --aligned --n 60000 --
 Step3: Calculating PRS for individuals in testing dataset.
 python scoring.py --h5geno ./aligned/align_geno.h5 --weight ./results/K1_weight.txt --aligned --out ./results --pheno pheno.txt --pheno-name T2D --cov covar.txt
 
+# Obtain PRStuning AUC using PRStuning.py
+param weight: weights of the PRS model to be evaluated, obtained from the training GWAS summary statistics dataset
+param beta_EB: matrix of sampled empirical Bayes beta saved to the output directory from the GWEB.py
+param n0: training data sample size for control group
+param n1: training data sample size for case group
+param alignResult: aligned object saved to the output directory from GWEB.py
+return: PRStuning AUC
 
