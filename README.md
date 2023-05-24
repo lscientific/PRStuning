@@ -17,7 +17,7 @@ Dependency:
 For Linux/Mac, see
 https://solarianprogrammer.com/2020/01/26/getting-started-gsl-gnu-scientific-library-windows-macos-linux/#gsl_usage_example)
 
-For Windows, you can download old version directly from 
+For Windows, can download old version directly from 
 https://code.google.com/p/oscats/downloads/list
 
 3. Install CythonGSL
@@ -28,10 +28,12 @@ If the DLLs can not be found, copy the gsl.dll and gslcblas.dll from GSL/bin to 
 
 4. Compilation:
 python setup.py build_ext --inplace
-(cython -a GWEButils_cFunc.pyx to check the speed bottleneck) 
+(cython -a GWEButils_cFunc.pyx to check the speed bottleneck)
 
-5. Usage:
-module load plink/1.90
+5. Install plink1.9
+See https://www.cog-genomics.org/plink/
+
+6. Usage:
 
 usage: GWEB [-h] --ssf SSF --ref REF [--bfile BFILE] [--bed BED] [--bim BIM] [--fam FAM] [--h5geno H5GENO] [--anno ANNO] [--snplist SNPLIST]
             [--iprefix IPREFIX] [--n N] [--K K [K ...]] [--pheno PHENO] [--mpheno MPHENO] [--pheno-name PHENO_NAME] [--cov COV] [--dir DIR] [--aligned]
@@ -88,12 +90,12 @@ Typical workflow:
 ###T2D
 
 Step1: Align all datasets
-python GWEB.py --ssf ./data/T2D/T2D_DIAGRAM_69033.txt --bfile ./data/ukbb_impv3_eur_hm3 --ref ./refdata/1000G_EUR_phase3_hm3_ld_shrink.h5 --align-only --dir ./data/T2D/aligned_ukbb/ --thread ${SLURM_CPUS_PER_TASK}
+python GWEB.py --ssf GWAS_summary_stats.txt --bfile testfile --ref reference_LD.h5 --align-only --dir ./aligned --thread ${SLURM_CPUS_PER_TASK}
 
 Step2: Conducting analysis
-python GWEB.py --iprefix ./data/T2D/aligned_ukbb/align_ --dir ./result/T2D/ --aligned --n 69033 --thread ${SLURM_CPUS_PER_TASK} --K 1 --weight-only
+python GWEB.py --iprefix ./aligned/align_ --dir ./results --aligned --n 60000 --thread ${SLURM_CPUS_PER_TASK} --K 1 --weight-only
 
 Step3: Calculating PRS for individuals in testing dataset.
-python scoring.py --h5geno ./data/T2D/aligned_ukbb/align_geno.h5 --weight ./result/T2D/K1_weight.txt --aligned --out ./result/T2D/K1/ --pheno ./data/ukbb_eur_traits_bin_withMed.txt --pheno-name T2D --cov ./data/ukbb_eur_covar.txt
+python scoring.py --h5geno ./aligned/align_geno.h5 --weight ./results/K1_weight.txt --aligned --out ./results --pheno pheno.txt --pheno-name T2D --cov covar.txt
 
 
