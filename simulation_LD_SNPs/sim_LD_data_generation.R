@@ -75,17 +75,18 @@ for(n_size in 2:5){
     f0_hat <- apply(X0, 2, mean)/2
     f1_hat <- apply(X1, 2, mean)/2
     se_hat <- sqrt(2 * f0_hat * (1-f0_hat))
-    coeff_p <- apply(X, 2, function(x){
-      Model <- summary(glm(y~x, family=binomial(link='logit')))
-      return(c(Model$coefficients[2, 1], Model$coefficients[2, 4]))
-    })
-    coeff <- coeff_p[1,]; p_value <- coeff_p[2,]
-    Z <- (f1_hat - f0_hat) / (se_hat / sqrt(Ne_train))
-    SSF <- data.frame(chr=rep('chr1', M), pos=1:M, ref=rep('A', M), alt=rep('C', M),
+    X_standardized <- scale(X)
+    y_standardized <- scale(y)
+    eff <- (t(X_standardized) %*% matrix(y_standardized, nc=1) / n)[, 1]
+    eff_se <- rep(1/sqrt(n), M)
+    p_value = 2 * pnorm(-abs(eff/eff_se))
+    
+    SSF <- data.frame(chr=rep('chr1', M), pos=1:M, ref=rep('A', M), alt=rep('C', M), 
                       reffrq=1-f0_hat, info=rep(1,M),
                       rs=sapply(1:M, function(x) paste0('rs', x)),
-                      pval=p_value, effalt=coeff)
-    fwrite(data.table(SSF), paste0(path, str, '/SSF', str, '.txt'), row.names=F, col.names=T, sep='\t')
+                      pval=p_value, effalt=eff, eff_se=eff_se)
+    fwrite(data.table(SSF), paste0(path, str, '/SSF', str, '.txt'), 
+           row.names=F, col.names=T, sep='\t')
     
     # generate reference genotype data
     geno_ref <- lapply(as.list(data.frame(X_ref)), function(x){
