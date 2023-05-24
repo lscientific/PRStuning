@@ -2,7 +2,7 @@ import numpy as np
 from scipy import stats
 from GWEButils import blockSize, blocking
 
-def sumAUC_adj_flist(weight, beta_EB, Rlist, n0, n1, alignResult):
+def sumAUC_adj_flist(weight, beta_EB, n0, n1, alignResult):
     '''
     :param weight: weights of the PRS model to be evaluated
     :param beta_EB: matrix of sampled empirical Bayes beta from the gibbs sampler
@@ -14,6 +14,7 @@ def sumAUC_adj_flist(weight, beta_EB, Rlist, n0, n1, alignResult):
     '''
     Ne = 4 * n0 * n1 / (n0 + n1)  # effective sample size
     n = beta_EB.shape[0] # number of empirical Bayes samples
+    Rlist = alignResult['REF']['LD']
     betaSE = alignResult['SS']['SE']
     flist = []
     for bk in range(len(alignResult['REF']['SNPINFO'])):
