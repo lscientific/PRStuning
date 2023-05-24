@@ -26,7 +26,7 @@ char_frac <- c('_p1.0000e+00.txt', '_p1.0000e-01.txt', '_p1.0000e-02.txt',
 res_LDpred_AUC <- array(NA, dim = c(5, n_rep, 3, length(fracs)), 
                         dimnames = list(size=2000 * 1:5, data=1:n_rep, Methods = c("Testing", "Unadj. tuning", "PRStuning"), 
                                         fracs = fracs))
-
+set.seed(123)
 for(t in 1:length(fracs)){
   for(n_size in 2:5){
     n0 <- 1000 * n_size; n1 <- 1000 * n_size
