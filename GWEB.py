@@ -13,6 +13,8 @@ import numpy as np
 import pandas as pd
 import ldsc
 import statsmodels.api as sm
+import traceback
+import pickle
 # from sklearn.linear_model import LassoCV
 
 window_length=74
@@ -58,7 +60,6 @@ parser = argparse.ArgumentParser(prog='GWEB',
                                                              
 
 #General arguments
-
 parser.add_argument('--ssf', type=str, required=not ('--iprefix' in sys.argv),
                     help='GWAS Summary statistic File. '
                         'Should be a text file with columns SNP/CHR/BP/BETA/SE')
@@ -181,6 +182,12 @@ parser.add_argument('--py', default=False, action='store_true',
 
 parser.add_argument('--mem', type=float, default=0, required=False,
                     help='Available memory in Gigabytes (Using maximum available memory by default)')
+
+parser.add_argument('--nsample', type=int, default=100, required=False,
+                    help='Number of samples of generated beta_est.')
+
+parser.add_argument('--nburnin', type=int, default=100, required=False,
+                    help='Number of samples of generated beta_est.')
 
 
 #parser.add_argument('--debug', default=False, action='store_true', help='Debug mode')
@@ -417,7 +424,7 @@ def main_with_args(args):
     print('Reading Reference Panel from',p_dict['ref'])
     if p_dict['snplist'] is not None:
         print('Intersecting with SNP List file', p_dict['snplist'])
-    if (p_dict['aligned'] or (not p_dict['savemem'])):
+    if p_dict['aligned'] or not p_dict['savemem']:
         refObj, newLDfile = PRSparser.refParser(p_dict['ref'], snpListFile=p_dict['snplist'], thread=p_dict['thread'])
     else:
         refStore = pd.HDFStore(p_dict['ref'], 'r')
@@ -460,7 +467,7 @@ def main_with_args(args):
     if p_dict['aligned']:
         if genoObj is None:
             withGeno = False
-            alignResult = {'SS': smryObj, 'REF': refObj,'ANNO': annoObj}
+            alignResult = {'SS': smryObj, 'REF': refObj, 'ANNO': annoObj}
         else:
             withGeno = not(PRSalign.isPdNan(genoObj['INDINFO']) or PRSalign.isPdNan(genoObj['GENOTYPE']))
             alignResult = {'SS': smryObj, 'GENO': genoObj, 'REF': refObj, 'ANNO': annoObj}
@@ -581,6 +588,9 @@ def main_with_args(args):
                 print("Unable to read initial params from file:", p_dict['init'])
             p_dict['K'] = []
 
+        #with open(os.path.join(p_dict['dir'], 'SS_LD.obj'), 'wb') as file:
+        #    pickle.dump(alignResult['REF']['LD'], file)
+
         # Add 0.1 to LD variance part for stability
         if (not p_dict['homo']):
             penality = 0.1
@@ -592,7 +602,7 @@ def main_with_args(args):
                 # if N90/N == 1:
                     # penality = 0
                 if N90/rawN<=(2/3):
-                    penality = 0.2 
+                    penality = 0.2
             for bk in range(len(alignResult['REF']['LD'])):
                 alignResult['REF']['LD'][bk] = (1-penality)*alignResult['REF']['LD'][bk]+penality*np.identity(alignResult['REF']['LD'][bk].shape[0])
 
@@ -600,22 +610,27 @@ def main_with_args(args):
             K = p_dict['K'][iterK]
             methodName = 'K'+str(K)
             print('======Without annotation data, K=', K,'======', sep='')
-            for iterRep in range(5): 
+            for iterRep in range(5):
                 startTime1 = time.time()
                 if iterRep == 4: momentEst = True
                 else: momentEst = p_dict['moment']
                 # estResult = GWEButils.gibbsEst(alignResult['SS']['BETA'], alignResult['SS']['SE'], alignResult['REF']['LD'], ldscVal, N=p_dict['n'], K=K, thread=p_dict['thread'], adj=adj)
                 try:
-                    estResult = GWEButils.ebEst(alignResult['SS']['BETA'], alignResult['SS']['SE'], alignResult['REF']['LD'], ldscVal, N=p_dict['n'], K=K, thread=p_dict['thread'], momentEst=momentEst, adj=adj)
+                    nsample = p_dict['nsample']
+                    nburnin = p_dict['nburnin']
+                    estResult = GWEButils.ebEst(alignResult['SS']['BETA'], alignResult['SS']['SE'],
+                                                alignResult['REF']['LD'], ldscVal, N=p_dict['n'], K=K,
+                                                thread=p_dict['thread'], momentEst=momentEst, adj=adj, nsample=nsample,
+                                                burnin=nburnin)
                 except Exception as e:
                     print('Error:'+str(e))
                     print('Rerunning the estimation')
                     continue
-                if estResult is not None: 
+                if estResult is not None:
                     print('Estimation completed! Time elapsed:',time.time()-startTime1,'s')
                     break
                 else:
-                    #Increasing penality 
+                    #Increasing penality
                     for bk in range(len(alignResult['REF']['LD'])):
                         alignResult['REF']['LD'][bk] += 0.1*np.identity(alignResult['REF']['LD'][bk].shape[0])
             if estResult is not None:
@@ -623,12 +638,12 @@ def main_with_args(args):
                 estResultList.append(estResult)
                 paramDF = pd.DataFrame({'pi': estResult['piEst'], 'sigma2': estResult['sigma2Est'] })
                 paramFile = os.path.join(p_dict['dir'], methodName+'_param.txt')
-                paramDF.to_csv(paramFile,sep='\t')
+                paramDF.to_csv(paramFile, sep='\t')
                 print('Estimated parameter values are saved to', paramFile)
                 if 'GENO' in alignResult:
                     weightObj = alignResult['GENO']['SNPINFO'][['RAW_SNP', 'RAW_A1']].copy()
                     weightObj.rename(columns={"RAW_SNP": "SNP", "RAW_A1": "A1"})
-                    weightObj.loc[:,'BETAJ'] = estResult['betaEst']
+                    weightObj.loc[:, 'BETAJ'] = estResult['betaEst']
                     weightObj.loc[alignResult['GENO']['FLIPINFO'],'BETAJ'] = -weightObj.loc[alignResult['GENO']['FLIPINFO'],'BETAJ']
                 else:
                     weightObj = alignResult['SS'].loc[:,['SNP','A1']].copy()
@@ -646,7 +661,7 @@ def main_with_args(args):
                     pipObj.to_csv(os.path.join(p_dict['dir'], methodName+'_pip.txt'), sep='\t', index=False, header=False)
                 except:
                     print('Can\'t write pips into file:', os.path.join(p_dict['dir'], methodName+'_pip.txt'))
-                
+
                 betaInit = estResult['beta'][-1,:]
                 gammaInit =(1.-estResult['gamma'][-1,0,:])
                 tmpInitDf = pd.DataFrame(data={'beta': betaInit, 'gamma': gammaInit})
@@ -658,13 +673,31 @@ def main_with_args(args):
                     tmpInitDf.to_csv(os.path.join(p_dict['dir'], methodName+'_init.txt'), sep='\t', index=False, header=True)
                 except:
                     print('Can\'t write initial params into file:', os.path.join(p_dict['dir'], methodName+'_init.txt'))
+                try:
+                    np.savetxt(os.path.join(p_dict['dir'], methodName +'_beta_sample.txt'), estResult['beta'], fmt="%f",
+                               delimiter="\t")
+                    print('Beta samples are saved to', os.path.join(p_dict['dir'], methodName +'_beta_sample.txt'))
+                except:
+                    print('Can\'t write beta into file:', os.path.join(p_dict['dir'], methodName +'_beta_sample.txt'))
+                try:
+                    print(f"Estimated causal proportion is {estResult['causalPropEst']}. Estimated total variance is "
+                          f"{estResult['totalVarEst']}. BIC is {estResult['BIC']}.")
+                except:
+                    print('Can\'t print estimated values.')
+                try:
+                    with open(os.path.join(p_dict['dir'], methodName + '_alignResult.obj'), 'wb') as file:
+                        pickle.dump(alignResult, file)
+                    f.close()
+                    print("Saved aligned result to file.")
+                except Exception as e:
+                    print(e)
             else:
                 print("Five times tried! Can't find a converged chain.")
-        
+
         if withAnno:
             print('======With annotation data======')
             A = alignResult['ANNO']['ANNODATA'].to_numpy().transpose()
-            
+
             if p_dict['annolist'] is not None:
                 topAnno = []
                 with open(p_dict['annolist']) as annolistFile:
@@ -683,9 +716,9 @@ def main_with_args(args):
 
                 # annoDF = pd.DataFrame(alignResult['ANNO']['ANNODATA'], columns=np.arange(A.shape[0]))
                 # topAnno = stagewise_selection(annoDF, (alignResult['SS']['BETA']/alignResult['SS']['SE'])**2, threshold=0.05/annoDF.shape[1],intercept=True)
-                
+
                 # topAnno = marginal_selection(annoDF, (alignResult['SS']['BETA']/alignResult['SS']['SE'])**2, intercept=True)
-            
+
                 # pip = 1.-estResultList[minBICidx]['gammaEst'][0,:]
                 # topAnno = stepwise_selection(annoDF, pip)
 
@@ -696,9 +729,9 @@ def main_with_args(args):
 
                 # reg = LassoCV(cv=5).fit(A.T, pip)
                 # topAnno = np.arange(A.shape[0])[np.abs(reg.coef_)>1e-6]
-            
+
                 # topAnno = list(range(A.shape[0]))
-            
+
             if len(topAnno)>0:
                 print('Annotation(s)', topAnno,'are selected')
             else:
@@ -707,35 +740,38 @@ def main_with_args(args):
             with open(os.path.join(p_dict['dir'],'anno_index.txt'), 'w') as annolistFile:
                 topAnnoList = [str(elem)+'\n' for elem in topAnno]
                 annolistFile.writelines(topAnnoList)
-        
+
         hasAnnoResult = False
         if withAnno:
             A = A[topAnno, :]
             methodName = 'anno'
-            for iterRep in range(5): 
+            for iterRep in range(5):
                 startTime1 = time.time()
                 if iterRep == 4: momentEst = True
                 else: momentEst = p_dict['moment']
                 try:
-                    estResult = GWEButils.ebEstAnno(alignResult['SS']['BETA'], alignResult['SS']['SE'], alignResult['REF']['LD'], ldscVal, A, N=p_dict['n'], fixProp=p_dict['fixp'], fixVar=p_dict['fixv'], thread=p_dict['thread'], betaInit = initDf['beta'], gammaInit = initDf['gamma'], momentEst=momentEst, adj=adj)
+                    estResult = GWEButils.ebEstAnno(alignResult['SS']['BETA'], alignResult['SS']['SE'], alignResult['REF']['LD'],
+                                                    ldscVal, A, N=p_dict['n'], fixProp=p_dict['fixp'], fixVar=p_dict['fixv'],
+                                                    thread=p_dict['thread'], betaInit = initDf['beta'], gammaInit = initDf['gamma'],
+                                                    momentEst=momentEst, adj=adj, nsample=nsample, burnin=nburnin)
                 except Exception as e:
                     print('Error:'+str(e))
                     print('Rerunning the estimation')
                     continue
-                if estResult is not None: 
+                if estResult is not None:
                     print('Estimation completed! Time elapsed:',time.time()-startTime1,'s')
                     break
                 else:
                     #Increasing constraint for l2 norm of beta
                     for bk in range(len(alignResult['REF']['LD'])):
                         alignResult['REF']['LD'][bk] += 0.1*np.identity(alignResult['REF']['LD'][bk].shape[0])
-            if estResult is not None:    
+            if estResult is not None:
                 hasAnnoResult = True
                 methodList.append(methodName)
                 estResultList.append(estResult)
                 paramDF = pd.DataFrame({'alpha': estResult['alphaEst'], 'eta': estResult['etaEst'] }, index=np.insert(topAnno, 0, -1))
                 paramFile = os.path.join(p_dict['dir'], 'anno_param.txt')
-                paramDF.to_csv(paramFile,sep='\t')
+                paramDF.to_csv(paramFile, sep='\t')
                 print('Estimated parameter values are saved to', paramFile)
                 weightObj = alignResult['GENO']['SNPINFO'][['RAW_SNP', 'RAW_A1']].copy()
                 weightObj.rename(columns={"RAW_SNP": "SNP", "RAW_A1": "A1"})
@@ -752,7 +788,7 @@ def main_with_args(args):
                 except:
                     print('Can\'t write pips into file:', os.path.join(p_dict['dir'], 'anno_pip.txt'))
                 annoBIC = estResult['BIC']
-                
+
                 betaInit = estResult['beta'][-1,:]
                 gammaInit = estResult['gamma'][-1,:]
                 tmpInitDf = pd.DataFrame(data={'beta': betaInit, 'gamma': gammaInit})
@@ -762,14 +798,14 @@ def main_with_args(args):
                     print('Can\'t write initial params into file:', os.path.join(p_dict['dir'], methodName+'_init.txt'))
             else:
                 print("Five times tried! Can't find a converged chain.")
-        
+
         if withGeno and (not p_dict['weight_only']):
             print('=======================')
             if p_dict['rfreq']:
                 af = extractRef(alignResult['REF'], col='F')
             else:
                 af = None
-            
+
             print('Getting PRS for genotype data...')
             if p_dict['mem'] is not None:
                 mem = p_dict['mem']-sys.getsizeof(alignResult)/(1024**3)
@@ -777,7 +813,7 @@ def main_with_args(args):
                 mem = None
             if (af is None) and (p_dict['np']):
                 af = PRScoring.getAlleleFreq(alignResult['GENO'], mem=mem)
-            
+
             scoreDFlist = []
             for iterEst in range(len(estResultList)):
                 estResult = estResultList[iterEst]
@@ -794,7 +830,7 @@ def main_with_args(args):
                     scoreDF.to_csv(os.path.join(p_dict['dir'], methodName+'_PRS.txt'), sep='\t', index=False)
                 except:
                     print('Unable to write risk scores into file:', os.path.join(p_dict['dir'],methodName+'_PRS.txt'))
-            
+
             print('Extracting phenotype...')
             phenoDF = PRSeval.phenoParser(alignResult['GENO'], phenoFile=p_dict['pheno'], PHE=p_dict['pheno_name'], mpheno=p_dict['mpheno'])
             isBinPhe = False
@@ -809,14 +845,14 @@ def main_with_args(args):
                 if p_dict['cov'] is not None:
                     print('Extracting covariates...')
                     covDF = PRSeval.covParser(p_dict['cov'])
-                
+
                 r2Df_minBIC = 0
                 r2Df_anno = 0
                 aucDf_minBIC = 0
                 aucDf_anno = 0
                 for iterEst in range(len(estResultList)):
                     methodName = methodList[iterEst]
-                    scoreDF = scoreDFlist[iterEst] 
+                    scoreDF = scoreDFlist[iterEst]
                     if p_dict['cov'] is not None:
                         newScoreDF, newPhenoDF, newCovDF = PRSeval.overlapIndDf([scoreDF, phenoDF, covDF])
                     else:
@@ -831,30 +867,30 @@ def main_with_args(args):
                     if len(phe)>0:
                         if isBinPhe:
                             aucDict = {}
-                        r2Dict = {}    
+                        r2Dict = {}
                         print('======',iterEst+1,'. ',methodName,'======', sep='')
                         if covData is not None:
                             pred01 = PRSeval.fit(phe, covData=covData)
                             PRSeval.strataPlot(phe, pred01['yhat'], figname=os.path.join(p_dict['dir'],methodName+'_strata_cov.pdf'))
                             if isBinPhe:
-                                aucObj01 = PRSeval.auc(phe, pred01['yhat'], figname=os.path.join(p_dict['dir'], methodName+'_roc_cov.pdf')) 
+                                aucObj01 = PRSeval.auc(phe, pred01['yhat'], figname=os.path.join(p_dict['dir'], methodName+'_roc_cov.pdf'))
                                 print('AUC based on covariates only: %.3f'%aucObj01['auc']+'(%.3f'%aucObj01['se']+')')
-        
-                        for label, prs in score.items(): 
+
+                        for label, prs in score.items():
                             r2obj = PRSeval.rsq(phe, prs, covData=covData)
                             r2Dict[label] = r2obj['r2'].map('{:,.4f}'.format)+'('+r2obj['se'].map('{:,.4f}'.format)+')'
                             pred10 = PRSeval.fit(phe, prs=prs)
 
                             PRSeval.strataPlot(phe, pred10['yhat'], figname=os.path.join(p_dict['dir'], methodName+'_strata_'+label+'_prs.pdf'))
-            
+
                             if covData is not None:
                                 pred11 = PRSeval.fit(phe, prs=prs, covData=covData)
                                 PRSeval.strataPlot(phe, pred11['yhat'], figname=os.path.join(p_dict['dir'], methodName+'_strata_'+label+'_prs_cov.pdf'))
                             if isBinPhe:
-                                aucObj10 = PRSeval.auc(phe, pred10['yhat'], figname=os.path.join(p_dict['dir'], methodName+'_roc_'+label+'_prs.pdf')) 
+                                aucObj10 = PRSeval.auc(phe, pred10['yhat'], figname=os.path.join(p_dict['dir'], methodName+'_roc_'+label+'_prs.pdf'))
                                 aucDict[label] = ['%.3f'%(aucObj10['auc'])+'('+'%.3f'%(aucObj10['se'])+')']
                                 if covData is not None:
-                                    aucObj11 = PRSeval.auc(phe, pred11['yhat'], figname=os.path.join(p_dict['dir'], methodName+'_roc_'+label+'_prs_cov.pdf')) 
+                                    aucObj11 = PRSeval.auc(phe, pred11['yhat'], figname=os.path.join(p_dict['dir'], methodName+'_roc_'+label+'_prs_cov.pdf'))
                                     aucDict[label].append('%.3f'%(aucObj11['auc'])+'('+'%.3f'%(aucObj11['se'])+')')
                                     aucDict[label].append('%.3f'%(aucObj11['auc']-aucObj01['auc'])+'('+'%.3f'%(np.sqrt(aucObj11['se']**2+aucObj01['se']**2))+')')
                                     aucDict[label].append('%.3f'%((aucObj11['auc']-aucObj01['auc'])/aucObj01['auc']))
@@ -868,7 +904,7 @@ def main_with_args(args):
                         print('Predictive r2:')
                         print(r2Df)
                         if iterEst == minBICidx:
-                            r2Df_minBIC = r2Df     
+                            r2Df_minBIC = r2Df
                         if hasAnnoResult and (iterEst == len(estResultList)-1):
                             r2Df_anno = r2Df
                         if isBinPhe:
@@ -879,10 +915,10 @@ def main_with_args(args):
                                 aucDf = pd.DataFrame.from_dict(aucDict, orient='index', columns=['prs'])
                             print(aucDf)
                             if iterEst == minBICidx:
-                                aucDf_minBIC = aucDf     
+                                aucDf_minBIC = aucDf
                             if hasAnnoResult and (iterEst == len(estResultList)-1):
                                 aucDf_anno = aucDf
-                
+
                 print('===============Summary===============')
                 pd.set_option("display.max_rows", None, "display.max_columns", None)
                 if len(p_dict['K'])>0:
@@ -910,8 +946,15 @@ def main_with_args(args):
     print('Memory usage:',"{:.1g}".format(psutil.Process(os.getpid()).memory_info().rss/(1024**2)),"MB")
     print('Thank you for using GWEB!')
 
+
 def main():
     main_with_args(sys.argv[1:])
 
 if __name__ == '__main__':
+    startTime = time.time()
     main_with_args(sys.argv[1:])
+    endTime = time.time()
+    print('Time cost', endTime - startTime, 's')
+
+
+
