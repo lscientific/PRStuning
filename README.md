@@ -120,7 +120,8 @@ For demo, to obtain 200 samples after 200 burin-in samples, run GWEB.py in the d
 python GWEB.py --iprefix ../demo/aligned/align_ --dir ../demo/results --aligned --n 69033 --thread 4 --K 1 --weight-only --nsample 200 --nburnin 200
 ```
 
-This will genererate ./Results/K1_alignResult.obj and ./Results/K1_beta_sample.txt, which will be used in PRStuning.py to obtain PRStuning AUC. This step should take around 30 minutes.
+This will genererate ```./Results/K1_alignResult.obj``` that includes the aligned information and ```./Results/K1_beta_sample.txt``` that inlcudes the empirical Bayes effect sizes. These two files will be used in ```PRStuning.py``` to obtain PRStuning AUC. 
+This step should take around 30 minutes.
 
 Step 3: Calculating PRS for individuals in testing dataset.
 ```ruby
