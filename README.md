@@ -102,7 +102,7 @@ Step2: Conducting analysis
 
 python GWEB.py --iprefix ./aligned/align_ --dir ./results --aligned --n ${TRAINING_SAMPLE_SIZE} --thread ${SLURM_CPUS_PER_TASK} --K 1 --weight-only
 
-For demo, GWEB.py --iprefix ./demo/aligned/align_ --dir ./results --aligned --n 69033 --thread 4 --K 1 --weight-only
+For demo, ...prstuning.GWEB.py --iprefix ./demo/aligned/align_ --dir ./results --aligned --n 69033 --thread 4 --K 1 --weight-only
 
 This will genererate ./Results/K1_alignResult.obj and ./Results/K1_beta_sample.txt
 
