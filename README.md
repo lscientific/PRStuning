@@ -30,9 +30,6 @@ If the DLLs can not be found, copy the gsl.dll and gslcblas.dll from GSL/bin to 
 python setup.py build_ext --inplace
 (cython -a GWEButils_cFunc.pyx to check the speed bottleneck)
 
-### Install plink1.9
-See https://www.cog-genomics.org/plink/
-
 ### Usage:
 
 usage: GWEB [-h] --ssf SSF --ref REF [--bfile BFILE] [--bed BED] [--bim BIM] [--fam FAM] [--h5geno H5GENO] [--anno ANNO] [--snplist SNPLIST]
