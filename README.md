@@ -96,19 +96,27 @@ Typical workflow (* indicates the step is optional.)
 
 Step1: Align all datasets
 
-'''python GWEB.py --ssf GWAS_summary_stats.txt --bfile testfile --ref reference_LD.h5 --align-only --dir ./aligned --thread ${SLURM_CPUS_PER_TASK}'''
+```ruby
+python GWEB.py --ssf GWAS_summary_stats.txt --bfile testfile --ref reference_LD.h5 --align-only --dir ./aligned --thread ${SLURM_CPUS_PER_TASK}
+```
 
 Step2: Conducting analysis
 
-'''python GWEB.py --iprefix ./aligned/align_ --dir ./results --aligned --n ${TRAINING_SAMPLE_SIZE} --thread ${SLURM_CPUS_PER_TASK} --K 1 --weight-only'''
+```ruby
+python GWEB.py --iprefix ./aligned/align_ --dir ./results --aligned --n ${TRAINING_SAMPLE_SIZE} --thread ${SLURM_CPUS_PER_TASK} --K 1 --weight-only
+```
 
 For demo, 
-'''...prstuning.GWEB.py --iprefix ./demo/aligned/align_ --dir ./results --aligned --n 69033 --thread 4 --K 1 --weight-only'''
+```ruby
+...prstuning.GWEB.py --iprefix ./demo/aligned/align_ --dir ./results --aligned --n 69033 --thread 4 --K 1 --weight-only
+```
 
 This will genererate ./Results/K1_alignResult.obj and ./Results/K1_beta_sample.txt
 
 Step3: Calculating PRS for individuals in testing dataset.
-'''python scoring.py --h5geno ./aligned/align_geno.h5 --weight ./results/K1_weight.txt --aligned --out ./results --pheno pheno.txt --pheno-name T2D --cov covar.txt'''
+```ruby
+python scoring.py --h5geno ./aligned/align_geno.h5 --weight ./results/K1_weight.txt --aligned --out ./results --pheno pheno.txt --pheno-name T2D --cov covar.txt
+```
 
 # Obtain PRStuning AUC using PRStuning.py
 
