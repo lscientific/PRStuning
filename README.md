@@ -87,13 +87,18 @@ Typical workflow:
   --thread THREAD       Number of parallel threads, by default all CPUs will be utilized.
 
   6. Example Demonstration:
-###T2D
 
 Step1: Align all datasets
+
 python GWEB.py --ssf GWAS_summary_stats.txt --bfile testfile --ref reference_LD.h5 --align-only --dir ./aligned --thread ${SLURM_CPUS_PER_TASK}
 
 Step2: Conducting analysis
-python GWEB.py --iprefix ./aligned/align_ --dir ./results --aligned --n 60000 --thread ${SLURM_CPUS_PER_TASK} --K 1 --weight-only
+
+python GWEB.py --iprefix ./aligned/align_ --dir ./results --aligned --n ${TRAINING_SAMPLE_SIZE} --thread ${SLURM_CPUS_PER_TASK} --K 1 --weight-only
+
+For demo, GWEB.py --iprefix ./demo/aligned/align_ --dir ./results --aligned --n 69033 --thread 4 --K 1 --weight-only
+
+This will genererate ./Results/K1_alignResult.obj and ./Results/K1_beta_sample.txt
 
 Step3: Calculating PRS for individuals in testing dataset.
 python scoring.py --h5geno ./aligned/align_geno.h5 --weight ./results/K1_weight.txt --aligned --out ./results --pheno pheno.txt --pheno-name T2D --cov covar.txt
@@ -102,13 +107,13 @@ python scoring.py --h5geno ./aligned/align_geno.h5 --weight ./results/K1_weight.
 
 param weight: weights of the PRS model to be evaluated, obtained from the training GWAS summary statistics dataset
 
-param beta_EB: matrix of sampled empirical Bayes beta saved to the output directory from the GWEB.py (in Step2 above)
+param beta_EB: matrix of sampled empirical Bayes beta saved to the output directory from the GWEB.py (in Step2 above, ./Results/K1_beta_sample.txt in demo)
 
 param n0: training data control sample size
 
 param n1: training data case sample size
 
-param alignResult: aligned object saved to the output directory from GWEB.py (in Step2 above)
+param alignResult: aligned object saved to the output directory from GWEB.py (in Step2 above, ./Results/K1_alignResult.obj in demo)
 
 return: PRStuning AUC
 
