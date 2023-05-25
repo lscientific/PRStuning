@@ -106,12 +106,12 @@ Step2: Conducting analysis
 python GWEB.py --iprefix ./aligned/align_ --dir ./results --aligned --n ${TRAINING_SAMPLE_SIZE} --thread ${SLURM_CPUS_PER_TASK} --K 1 --weight-only
 ```
 
-For demo, 
+For demo, to obtain 200 samples after 200 burin-in samples, run
 ```ruby
-...prstuning.GWEB.py --iprefix ./demo/aligned/align_ --dir ./results --aligned --n 69033 --thread 4 --K 1 --weight-only
+python GWEB.py --iprefix ./aligned/align_ --dir ./results --aligned --n 69033 --thread 4 --K 1 --weight-only --nsample 200 --nburnin 200
 ```
 
-This will genererate ./Results/K1_alignResult.obj and ./Results/K1_beta_sample.txt
+This will genererate ./Results/K1_alignResult.obj and ./Results/K1_beta_sample.txt, which will be used in PRStuning.py
 
 Step3: Calculating PRS for individuals in testing dataset.
 ```ruby
