@@ -31,8 +31,11 @@ If the DLLs can not be found, copy the gsl.dll and gslcblas.dll from GSL/bin to 
 Installation is expected to be within a few minutes.
 
 ### Compilation:
+In the directory ```prstuning```, run
+```ruby
 python setup.py build_ext --inplace
-(cython -a GWEButils_cFunc.pyx to check the speed bottleneck)
+```
+(```cython -a GWEButils_cFunc.pyx``` to check the speed bottleneck)
 
 ### Usage:
 
