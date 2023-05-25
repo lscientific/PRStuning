@@ -12,28 +12,28 @@ Dependency:
 	Pandas
 	arspy (https://arspy.readthedocs.io/en/latest/)
 
-1. Install cython using PIP or conda (https://cython.readthedocs.io/en/latest/src/quickstart/install.html)
-2. Install GSL 
+### Install cython using PIP or conda (https://cython.readthedocs.io/en/latest/src/quickstart/install.html)
+### Install GSL 
 For Linux/Mac, see
 https://solarianprogrammer.com/2020/01/26/getting-started-gsl-gnu-scientific-library-windows-macos-linux/#gsl_usage_example)
 
 For Windows, can download old version directly from 
 https://code.google.com/p/oscats/downloads/list
 
-3. Install CythonGSL
+### Install CythonGSL
 See https://github.com/twiecki/CythonGSL
 
 Special Tips for windows: See http://joonro.github.io/blog/posts/installing-gsl-and-cythongsl-in-windows/
 If the DLLs can not be found, copy the gsl.dll and gslcblas.dll from GSL/bin to current project directory
 
-4. Compilation:
+### Compilation:
 python setup.py build_ext --inplace
 (cython -a GWEButils_cFunc.pyx to check the speed bottleneck)
 
-5. Install plink1.9
+### Install plink1.9
 See https://www.cog-genomics.org/plink/
 
-6. Usage:
+### Usage:
 
 usage: GWEB [-h] --ssf SSF --ref REF [--bfile BFILE] [--bed BED] [--bim BIM] [--fam FAM] [--h5geno H5GENO] [--anno ANNO] [--snplist SNPLIST]
             [--iprefix IPREFIX] [--n N] [--K K [K ...]] [--pheno PHENO] [--mpheno MPHENO] [--pheno-name PHENO_NAME] [--cov COV] [--dir DIR] [--aligned]
@@ -42,7 +42,7 @@ usage: GWEB [-h] --ssf SSF --ref REF [--bfile BFILE] [--bed BED] [--bim BIM] [--
 GWEB: An Empirical-Bayes-based polygenic risk prediction approach
 using GWAS summary statistics and functional annotations
 
-Typical workflow:
+### Typical workflow:
     0a*. Use plinkLD.py to calculate LD matrix for PLINK binary format
     encoded genotype data of a reference panel.
     See plinkLD.py --help for further usage description and options.
@@ -86,7 +86,7 @@ Typical workflow:
   --weight-only         Weighting only, without scoring and evaluation
   --thread THREAD       Number of parallel threads, by default all CPUs will be utilized.
 
-  6. Example Demonstration:
+### Example Demonstration:
 
 Step1: Align all datasets
 
