@@ -1,4 +1,4 @@
-# Implement empirical Bayes using Gibbs-sampling-based SAME algorithm
+# Implement Gibbs-sampling-based SAME algorithm to obtain empirical Bayes effect sizes
 
 Python Version: >=3.0
 Dependency: 
