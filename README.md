@@ -39,27 +39,18 @@ usage: GWEB [-h] --ssf SSF --ref REF [--bfile BFILE] [--bed BED] [--bim BIM] [--
             [--iprefix IPREFIX] [--n N] [--K K [K ...]] [--pheno PHENO] [--mpheno MPHENO] [--pheno-name PHENO_NAME] [--cov COV] [--dir DIR] [--aligned]
             [--align-only] [--weight-only] [--thread THREAD]
 
-GWEB: An Empirical-Bayes-based polygenic risk prediction approach
-using GWAS summary statistics and functional annotations
+GWEB: An Empirical-Bayes-based polygenic risk prediction approach using GWAS summary statistics and functional annotations
 
-Typical workflow:
-    0a*. Use plinkLD.py to calculate LD matrix for PLINK binary format encoded genotype data of a reference panel.
-    
-    See plinkLD.py --help for further usage description and options.
+Typical workflow (* indicates the step is optional.)
 
-    0b*. Use formatSS.py to convert GWAS summary statistics from different cohorts into the standard input format of GWEB.
-    
-    See formatSS.py --help for further usage description and options.
+0a*. Use plinkLD.py to calculate LD matrix for PLINK binary format encoded genotype data of a reference panel. See plinkLD.py --help for further usage description and options.
 
-    1. Use GWEB.py to obtain SNP weights for polygenic scoring.
-    
-    See GWEB.py --help for further usage description and options.
+0b*. Use formatSS.py to convert GWAS summary statistics from different cohorts into the standard input format of GWEB. See formatSS.py --help for further usage description and options.
 
-    2*. Use scoring.py to calculate polygenic scores for an external individual-level genotype data using SNP weights from the previous step.
-    
-    See scoring --help for further usage description and options.
+1. Use GWEB.py to obtain SNP weights for polygenic scoring. See GWEB.py --help for further usage description and options.
 
-    (*) indicates the step is optional.
+2*. Use scoring.py to calculate polygenic scores for an external individual-level genotype data using SNP weights from the previous step. See scoring --help for further usage description and options.
+
 
   --ssf SSF                 GWAS Summary statistic File. Should be a text file with columns SNP/CHR/BP/BETA/SE
   
