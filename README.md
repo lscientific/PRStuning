@@ -12,7 +12,9 @@ Dependency:
 	Pandas
 	arspy (https://arspy.readthedocs.io/en/latest/)
 
-### Install cython using PIP or conda (https://cython.readthedocs.io/en/latest/src/quickstart/install.html)
+### Install cython using PIP or conda 
+https://cython.readthedocs.io/en/latest/src/quickstart/install.html
+
 ### Install GSL 
 For Linux/Mac, see
 https://solarianprogrammer.com/2020/01/26/getting-started-gsl-gnu-scientific-library-windows-macos-linux/#gsl_usage_example)
