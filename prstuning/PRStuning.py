@@ -45,5 +45,6 @@ def sumAUC_adj_flist(weight, beta_EB, n0, n1, alignResult):
     delta_samples = [np.abs(delta) for delta in delta_samples]
     AUC_samples = [stats.norm.cdf(i) for i in delta_samples]
     adj_AUC = np.mean(AUC_samples)
+    print("The PRStuning AUC is" + adj_AUC)
 
     return adj_AUC
