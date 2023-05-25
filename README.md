@@ -26,6 +26,7 @@ See https://github.com/twiecki/CythonGSL
 Special Tips for windows: See http://joonro.github.io/blog/posts/installing-gsl-and-cythongsl-in-windows/
 If the DLLs can not be found, copy the gsl.dll and gslcblas.dll from GSL/bin to current project directory
 
+Installation is expected to be within a few minutes.
 
 ### Compilation:
 python setup.py build_ext --inplace
