@@ -115,9 +115,9 @@ Step 2: Conducting analysis
 python GWEB.py --iprefix ./aligned/align_ --dir ./results --aligned --n ${TRAINING_SAMPLE_SIZE} --thread ${SLURM_CPUS_PER_TASK} --K 1 --weight-only
 ```
 
-For demo, to obtain 200 samples after 200 burin-in samples, run GWEB.py in the directory ```prstuning```
+For demo, to obtain 10 samples after 10 burin-in samples, run GWEB.py in the directory ```prstuning```
 ```ruby
-python GWEB.py --iprefix ../demo/aligned/align_ --dir ../demo/results --aligned --n 69033 --thread 4 --K 1 --weight-only --nsample 200 --nburnin 200
+python GWEB.py --iprefix ../demo/aligned/align_ --dir ../demo/results --aligned --n 69033 --thread 4 --K 1 --weight-only --nsample 10 --nburnin 10
 ```
 
 This will genererate ```./Results/K1_alignResult.obj``` that includes the aligned information and ```./Results/K1_beta_sample.txt``` that inlcudes the empirical Bayes effect sizes. These two files will be used in ```PRStuning.py``` to obtain PRStuning AUC. 
