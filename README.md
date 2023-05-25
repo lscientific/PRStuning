@@ -60,31 +60,48 @@ using GWAS summary statistics and functional annotations
 
     (*) indicates the step is optional.
 
-  --ssf SSF             GWAS Summary statistic File. Should be a text file with columns SNP/CHR/BP/BETA/SE
-  --ref REF             Reference LD File. Should be a (full path) hdf5 file storing the LD matrix and corresponding SNP information. (plinkLD.py can be
-                        used to convert PLINK binary files into the LD hdf5 file.)
-  --bfile BFILE         Individual-level genotype data for testing purpose. Should be PLINK binary format files with extension .bed/.bim/.fam
-  --bed BED             Binary genotype data with suffix .bed (Used if bfile is not provided)
-  --bim BIM             SNP infomation file with suffix .bim (Used if bfile is not provided)
-  --fam FAM             Individual information file with suffix .fam (Used if bfile is not provided)
-  --h5geno H5GENO       Individual-level genotype data with hdf5 format
-  --anno ANNO           Functional annotation file. Should be a hdf5 file storing annotations for SNPs
-  --snplist SNPLIST     SNP list file used to filter SNPs
-  --iprefix IPREFIX     Common prefix for input files (summary statistics, reference panel, genotypes, annotations)
-  --n N                 Sample size of the GWAS summary statistics. (If provided, LDSC will be used to adjust the inflation caused by potential confounding
-                        effect.)
-  --K K [K ...]         Number of causal components (Default:3)
-  --pheno PHENO         External phenotype file.Should be a tabular text file. If header is not provided, the first and second columns should be FID and
-                        IID, respectively. Otherwise, there are two columns named 'FID' and 'IID'
-  --mpheno MPHENO       m-th phenotype in the file to be used (default: 1)
-  --pheno-name PHENO_NAME
-                        Column name for the phenotype in the phenotype file (default:PHE)
-  --cov COV             covariates file, format is tabulated file with columns FID, IID, PC1, PC2, etc.
-  --dir DIR             Output directory
-  --aligned             The input has already been aligned
-  --align-only          Align all input files only
-  --weight-only         Weighting only, without scoring and evaluation
-  --thread THREAD       Number of parallel threads, by default all CPUs will be utilized.
+  --ssf SSF                 GWAS Summary statistic File. Should be a text file with columns SNP/CHR/BP/BETA/SE
+  
+  --ref REF                 Reference LD File. Should be a (full path) hdf5 file storing the LD matrix and corresponding SNP information. (plinkLD.py can be used to convert PLINK binary files into the LD hdf5 file.)
+			
+  --bfile BFILE             Individual-level genotype data for testing purpose. Should be PLINK binary format files with extension .bed/.bim/.fam
+  
+  --bed BED                 Binary genotype data with suffix .bed (Used if bfile is not provided)
+  
+  --bim BIM                 SNP infomation file with suffix .bim (Used if bfile is not provided)
+  
+  --fam FAM                 Individual information file with suffix .fam (Used if bfile is not provided)
+  
+  --h5geno H5GENO           Individual-level genotype data with hdf5 format
+  
+  --anno ANNO               Functional annotation file. Should be a hdf5 file storing annotations for SNPs
+  
+  --snplist SNPLIST         SNP list file used to filter SNPs
+  
+  --iprefix IPREFIX         Common prefix for input files (summary statistics, reference panel, genotypes, annotations)
+  
+  --n N                     Sample size of the GWAS summary statistics. (If provided, LDSC will be used to adjust the inflation caused by potential confounding effect.)
+			
+  --K K [K ...]             Number of causal components (Default:3)
+  
+  --pheno PHENO             External phenotype file.Should be a tabular text file. If header is not provided, the first and second columns should be FID and IID, respectively. Otherwise, there are two columns named 'FID' and 'IID'
+			
+  --mpheno MPHENO           m-th phenotype in the file to be used (default: 1)
+  
+  --pheno-name PHENO_NAME   Column name for the phenotype in the phenotype file (default:PHE)
+  
+  --cov COV                 covariates file, format is tabulated file with columns FID, IID, PC1, PC2, etc.
+  
+  --dir DIR                 Output directory
+  
+  --aligned                 The input has already been aligned
+  
+  --align-only              Align all input files only
+  
+  --weight-only             Weighting only, without scoring and evaluation
+  
+  --thread THREAD           Number of parallel threads, by default all CPUs will be utilized.
+  
 
 ### Example Demonstration:
 
