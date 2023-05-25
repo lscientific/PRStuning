@@ -142,4 +142,4 @@ param alignResult: aligned object saved to the output directory from GWEB.py (in
 
 return: PRStuning AUC
 ```
-
+Runing ```PRStuning.py``` prints out the PRStuning AUC value.
