@@ -32,9 +32,9 @@ python setup.py build_ext --inplace
 
 ### Usage:
 
-usage: GWEB [-h] --ssf SSF --ref REF [--bfile BFILE] [--bed BED] [--bim BIM] [--fam FAM] [--h5geno H5GENO] [--anno ANNO] [--snplist SNPLIST]
-            [--iprefix IPREFIX] [--n N] [--K K [K ...]] [--pheno PHENO] [--mpheno MPHENO] [--pheno-name PHENO_NAME] [--cov COV] [--dir DIR] [--aligned]
-            [--align-only] [--weight-only] [--thread THREAD]
+usage: ```GWEB [-h] --ssf SSF --ref REF [--bfile BFILE] [--bed BED] [--bim BIM] [--fam FAM] [--h5geno H5GENO] [--anno ANNO] [--snplist SNPLIST]
+               [--iprefix IPREFIX] [--n N] [--K K [K ...]] [--pheno PHENO] [--mpheno MPHENO] [--pheno-name PHENO_NAME] [--cov COV] [--dir DIR] [--aligned]
+               [--align-only] [--weight-only] [--thread THREAD]```
 
 GWEB: An Empirical-Bayes-based polygenic risk prediction approach using GWAS summary statistics and functional annotations
 
@@ -49,7 +49,7 @@ Typical workflow (* indicates the step is optional.)
 2*. Use scoring.py to calculate polygenic scores for an external individual-level genotype data using SNP weights from the previous step. See scoring --help for further usage description and options.
 
 
-  --ssf SSF                 GWAS Summary statistic File. Should be a text file with columns SNP/CHR/BP/BETA/SE
+  ```--ssf SSF                 GWAS Summary statistic File. Should be a text file with columns SNP/CHR/BP/BETA/SE
   
   --ref REF                 Reference LD File. Should be a (full path) hdf5 file storing the LD matrix and corresponding SNP information. (plinkLD.py can be used to convert PLINK binary files into the LD hdf5 file.)
 			
@@ -90,7 +90,7 @@ Typical workflow (* indicates the step is optional.)
   --weight-only             Weighting only, without scoring and evaluation
   
   --thread THREAD           Number of parallel threads, by default all CPUs will be utilized.
-  
+  ```
 
 ### Example Demonstration:
 
