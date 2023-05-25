@@ -128,7 +128,7 @@ python scoring.py --h5geno ./aligned/align_geno.h5 --weight ./results/K1_weight.
 ```
 
 # Obtain PRStuning AUC using PRStuning.py
-
+```
 param weight: weights of the PRS model to be evaluated, obtained from the training GWAS summary statistics dataset
 
 param beta_EB: matrix of sampled empirical Bayes beta saved to the output directory from the GWEB.py (in Step2 above, ./Results/K1_beta_sample.txt in demo)
@@ -140,4 +140,5 @@ param n1: training data case sample size
 param alignResult: aligned object saved to the output directory from GWEB.py (in Step2 above, ./Results/K1_alignResult.obj in demo)
 
 return: PRStuning AUC
+```
 
