@@ -49,7 +49,10 @@ Typical workflow (* indicates the step is optional.)
 2*. Use scoring.py to calculate polygenic scores for an external individual-level genotype data using SNP weights from the previous step. See scoring --help for further usage description and options.
 
 
-  --ssf SSF                 GWAS Summary statistic File. Should be a text file with columns SNP/CHR/BP/BETA/SE
+  ```ruby
+  --ssf SSF
+  ```
+  GWAS Summary statistic File. Should be a text file with columns SNP/CHR/BP/BETA/SE
   
   --ref REF                 Reference LD File. Should be a (full path) hdf5 file storing the LD matrix and corresponding SNP information. (plinkLD.py can be used to convert PLINK binary files into the LD hdf5 file.)
 			
