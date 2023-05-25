@@ -108,10 +108,10 @@ python GWEB.py --iprefix ./aligned/align_ --dir ./results --aligned --n ${TRAINI
 
 For demo, to obtain 200 samples after 200 burin-in samples, run GWEB.py in the directory ```prstuning```
 ```ruby
-python GWEB.py --iprefix ./aligned/align_ --dir ./results --aligned --n 69033 --thread 4 --K 1 --weight-only --nsample 200 --nburnin 200
+python GWEB.py --iprefix ../demo/aligned/align_ --dir ../demo/results --aligned --n 69033 --thread 4 --K 1 --weight-only --nsample 200 --nburnin 200
 ```
 
-This will genererate ./Results/K1_alignResult.obj and ./Results/K1_beta_sample.txt, which will be used in PRStuning.py
+This will genererate ./Results/K1_alignResult.obj and ./Results/K1_beta_sample.txt, which will be used in PRStuning.py to obtain PRStuning AUC.
 
 Step3: Calculating PRS for individuals in testing dataset.
 ```ruby
