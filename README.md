@@ -120,7 +120,7 @@ For demo, to obtain 10 samples after 10 burin-in samples, run GWEB.py in the dir
 python GWEB.py --iprefix ../demo/aligned/align_ --dir ../demo/results --aligned --n 69033 --thread 4 --K 1 --weight-only --nsample 10 --nburnin 10
 ```
 
-This will genererate ```./Results/K1_alignResult.obj``` that includes the aligned information and ```./Results/K1_beta_sample.txt``` that inlcudes the empirical Bayes effect sizes. These two files will be used in ```PRStuning.py``` to obtain PRStuning AUC. 
+This will genererate ```../demo/results/K1_alignResult.obj``` that includes the aligned information and ```../demo/results/K1_beta_sample.txt``` that inlcudes the empirical Bayes effect sizes. These two files will be used in ```PRStuning.py``` to obtain PRStuning AUC. 
 This step should take around 10 minutes.
 
 Step 3: Calculating PRS for individuals in testing dataset.
@@ -132,13 +132,13 @@ python scoring.py --h5geno ./aligned/align_geno.h5 --weight ./results/K1_weight.
 ```
 param weight: weights of the PRS model to be evaluated, obtained from the training GWAS summary statistics dataset
 
-param beta_EB: matrix of sampled empirical Bayes beta saved to the output directory from the GWEB.py (in Step2 above, ./Results/K1_beta_sample.txt in demo)
+param beta_EB: matrix of sampled empirical Bayes beta saved to the output directory from the GWEB.py (in Step2 above, ../demo/results/K1_beta_sample.txt in demo)
 
 param n0: training data control sample size
 
 param n1: training data case sample size
 
-param alignResult: aligned object saved to the output directory from GWEB.py (in Step2 above, ./Results/K1_alignResult.obj in demo)
+param alignResult: aligned object saved to the output directory from GWEB.py (in Step2 above, ../demo/results/K1_alignResult.obj in demo)
 
 return: PRStuning AUC
 ```
