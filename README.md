@@ -42,20 +42,21 @@ usage: GWEB [-h] --ssf SSF --ref REF [--bfile BFILE] [--bed BED] [--bim BIM] [--
 GWEB: An Empirical-Bayes-based polygenic risk prediction approach
 using GWAS summary statistics and functional annotations
 
-### Typical workflow:
-    0a*. Use plinkLD.py to calculate LD matrix for PLINK binary format
-    encoded genotype data of a reference panel.
+Typical workflow:
+    0a*. Use plinkLD.py to calculate LD matrix for PLINK binary format encoded genotype data of a reference panel.
+    
     See plinkLD.py --help for further usage description and options.
 
-    0b*. Use formatSS.py to convert GWAS summary statistics from
-    different cohorts into the standard input format of GWEB.
+    0b*. Use formatSS.py to convert GWAS summary statistics from different cohorts into the standard input format of GWEB.
+    
     See formatSS.py --help for further usage description and options.
 
     1. Use GWEB.py to obtain SNP weights for polygenic scoring.
+    
     See GWEB.py --help for further usage description and options.
 
-    2*. Use scoring.py to calculate polygenic scores for an external
-    individual-level genotype data using SNP weights from the previous step.
+    2*. Use scoring.py to calculate polygenic scores for an external individual-level genotype data using SNP weights from the previous step.
+    
     See scoring --help for further usage description and options.
 
     (*) indicates the step is optional.
