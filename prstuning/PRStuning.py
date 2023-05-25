@@ -2,7 +2,7 @@ import numpy as np
 from scipy import stats
 from GWEButils import blockSize, blocking
 
-def sumAUC_adj_flist(weight, beta_EB, n0, n1, alignResult):
+def prstuning_calculate(weight, beta_EB, n0, n1, alignResult):
     '''
     :param weight: weights of the PRS model to be evaluated
     :param beta_EB: matrix of sampled empirical Bayes beta from the gibbs sampler
