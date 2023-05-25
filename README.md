@@ -121,7 +121,7 @@ python GWEB.py --iprefix ../demo/aligned/align_ --dir ../demo/results --aligned 
 ```
 
 This will genererate ```./Results/K1_alignResult.obj``` that includes the aligned information and ```./Results/K1_beta_sample.txt``` that inlcudes the empirical Bayes effect sizes. These two files will be used in ```PRStuning.py``` to obtain PRStuning AUC. 
-This step should take around 30 minutes.
+This step should take around 10 minutes.
 
 Step 3: Calculating PRS for individuals in testing dataset.
 ```ruby
