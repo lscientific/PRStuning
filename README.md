@@ -97,13 +97,13 @@ See formatSS.py --help for further usage description and options.
 
 ### Example Demonstration:
 
-####Step1: Align all datasets
+Step1: Align all datasets
 
 ```ruby
 python GWEB.py --ssf GWAS_summary_stats.txt --bfile testfile --ref reference_LD.h5 --align-only --dir ./aligned --thread ${SLURM_CPUS_PER_TASK}
 ```
 
-####Step2: Conducting analysis
+Step2: Conducting analysis
 
 ```ruby
 python GWEB.py --iprefix ./aligned/align_ --dir ./results --aligned --n ${TRAINING_SAMPLE_SIZE} --thread ${SLURM_CPUS_PER_TASK} --K 1 --weight-only
@@ -116,7 +116,7 @@ python GWEB.py --iprefix ../demo/aligned/align_ --dir ../demo/results --aligned 
 
 This will genererate ./Results/K1_alignResult.obj and ./Results/K1_beta_sample.txt, which will be used in PRStuning.py to obtain PRStuning AUC. This step should take around 20 minutes.
 
-####Step3: Calculating PRS for individuals in testing dataset.
+Step3: Calculating PRS for individuals in testing dataset.
 ```ruby
 python scoring.py --h5geno ./aligned/align_geno.h5 --weight ./results/K1_weight.txt --aligned --out ./results --pheno pheno.txt --pheno-name T2D --cov covar.txt
 ```
