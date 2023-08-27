@@ -6,10 +6,10 @@ Dependency:
 	Scipy;
 	Cython; 
 	GSL (https://www.gnu.org/software/gsl/); 
-	CythonGSL (https://github.com/twiecki/CythonGSL)
-	pysnptools
-	scikit-learn
-	Pandas
+	CythonGSL (https://github.com/twiecki/CythonGSL);
+	pysnptools;
+	scikit-learn;
+	Pandas;
 	arspy (https://arspy.readthedocs.io/en/latest/)
 
 ### Install cython using PIP or conda 
