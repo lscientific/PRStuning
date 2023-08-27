@@ -44,7 +44,7 @@ def prstuning_calculate(weight, beta_EB, n0, n1, alignResult):
     delta_samples = 2 * (np.array(np.sum(wf_bk, axis=1) / np.sqrt(2*s2))).flatten()
     delta_samples = [np.abs(delta) for delta in delta_samples]
     AUC_samples = [stats.norm.cdf(i) for i in delta_samples]
-    adj_AUC = np.mean(AUC_samples)
-    print("The PRStuning AUC is" + adj_AUC)
+    AUC_prstuning = np.mean(AUC_samples)
+    print("The PRStuning AUC is" + AUC_prstuning)
 
-    return adj_AUC
+    return AUC_prstuning
