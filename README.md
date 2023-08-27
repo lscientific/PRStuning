@@ -4,7 +4,7 @@ Python Version: >=3.0
 Dependency: 
 	Numpy; \
 	Scipy; \
-	Cython; \ 
+	Cython; \
 	GSL (https://www.gnu.org/software/gsl/); \
 	CythonGSL (https://github.com/twiecki/CythonGSL); \
 	pysnptools; \
