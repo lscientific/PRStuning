@@ -55,7 +55,7 @@ Installation is expected to be finished within a few minutes.
 ## Usage
 ### plinkLD.py (optional step)
 ```
-python plinkLD.py --bfile BFILE [--bed BED] [--bim BIM] [--fam FAM] [--block: BLOCK_FILE] [--snplist SNPLIST] 
+python plinkLD.py --bfile BFILE [--bed BED] [--bim BIM] [--fam FAM] [--block: BLOCK_FILE] [--snplist SNPLIST] \
 [--output OUTPUT] [--method METHOD] [--thread THREAD] [--compress COMPRESS] [--log LOG]
 ```
 
