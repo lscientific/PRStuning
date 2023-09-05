@@ -53,6 +53,7 @@ Installation is expected to be finished within a few minutes.
 
      
 ## Usage
+### plinkLD.py (optional step)
 ```
 python plinkLD.py --bfile BFILE [--bed BED] [--bim BIM] [--fam FAM] [--block: BLOCK_FILE] [--snplist SNPLIST] \
 [--output OUTPUT] [--method METHOD] [--thread THREAD] [--compress COMPRESS] [--log LOG]
@@ -70,7 +71,7 @@ python plinkLD.py --bfile BFILE [--bed BED] [--bim BIM] [--fam FAM] [--block: BL
 ```--compress: COMPRESS```  &nbsp;&nbsp;&nbsp; Compression level for output (Default: 9) \
 ```--log: LOG```     &nbsp;&nbsp;&nbsp;     log file (Default: plinkLD.log) 
 
-
+### PRStuning.py
 ```
 python PRStuning.py --ssf SSF --weight WEIGHT --n0 N0 --n1 N1 [--pruning] [--ref REF] [--homo HOMO] [--geno GENO] \
  [--pheno PHENO] [--n N] [--dir DIR] [--thread THREAD]
