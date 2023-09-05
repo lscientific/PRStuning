@@ -1,4 +1,4 @@
-# Implement Gibbs-sampling-based SAME algorithm to obtain empirical Bayes effect sizes
+# Estimate Testing AUC for Binary Phenotype Using GWAS Summary Statistics from the Training Data
 
 Python Version: >=3.8
 Dependency:
