@@ -57,10 +57,10 @@ Installation is expected to be finished within a few minutes.
 python plinkLD.py --bfile BFILE [--bed BED] [--bim BIM] [--fam FAM] [--block: BLOCK_FILE] [--snplist SNPLIST] [--output OUTPUT] [--method METHOD] [--thread THREAD] [--compress COMPRESS] [--log LOG]
 ```
 ```
---bfile BFILE &nbsp &nbsp  Binary data file \
---bed: BIM$ &nbsp &nbsp  Binary data file (Genotypes) \
---bim: BIM$~~~~~~~~~~~~~~~$Binary data file (SNP info) \
---fam: FAM$~~~~~~~~~~~~~~~$Binary data file (Individual info) \
+--bfile BFILE <br />  <br /> Binary data file \
+--bed: BIM$ <br />  <br /> Binary data file (Genotypes) \
+--bim: BIM     <br />    Binary data file (SNP info) \
+--fam: FAM   <br /> Binary data file (Individual info) \
 --block: BLOCK_FILE$~~~~~~$Block file (Default: all SNPs are in one block)
 --snplist: SNPLIST$~~~~~~~$SNP list file (Default: all SNP pairs are calculated)
 --output: OUTPUT$~~~~~~~~~$Output filename (Default: LD.h5)
