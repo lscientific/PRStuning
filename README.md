@@ -45,8 +45,7 @@ python setup.py build_ext --inplace
 Installation is expected to be finished within a few minutes.
 
 ## Typical Workflow:
-(*) indicates the step is optional \
-* Use ```plinkLD.py``` to calculate the LD matrix for PLINK binary format encoded genotype data of a reference panel.
+(Optional) Use ```plinkLD.py``` to calculate the LD matrix for PLINK binary format encoded genotype data of a reference panel.
   See ```python plinkLD.py --help``` for further usage description and options.\
 
   Use ```PRStuning.py``` to obtain estimated AUC using GWAS summary statistics from the training data
