@@ -26,10 +26,10 @@ Copy bin/libgsl-0.dll and bin/libgslcblas-0.dll into the working directory
 Special tips for installing GSL on Windows can be found at http://joonro.github.io/blog/posts/installing-gsl-and-cythongsl-in-windows/
 
 ### Install python packages via conda or pip:
-First
+First \
 ```conda install python">=3.8" scipy numpy pandas scikit-learn rpy2 cython sklearn pip``` \
 or 	```pip install scipy numpy pandas scikit-learn rpy2 cython sklearn```
-Then
+Then \
 ```
 pip install tables
 pip install pysnptools
@@ -45,30 +45,39 @@ python setup.py build_ext --inplace
 Installation is expected to be finished within a few minutes.
 
 ## Typical Workflow:
+(*) indicates the step is optional \
+* Use ```plinkLD.py``` to calculate the LD matrix for PLINK binary format encoded genotype data of a reference panel.
+  See ```python plinkLD.py --help``` for further usage description and options.\
 
-0a*. Use plinkLD.py to calculate the LD matrix for PLINK binary format encoded genotype data of a reference panel.
-     See plinkLD.py --help for further usage description and options.
+  Use ```PRStuning.py``` to obtain estimated AUC using GWAS summary statistics from the training data
+  See ```python PRStuning.py --help``` for further usage description and options.
 
      
 ## Usage
+```
+python plinkLD.py --bfile BFILE [--bed BED] [--bim BIM] [--fam FAM] [--block: BLOCK_FILE] [--snplist SNPLIST] [--output OUTPUT] [--method METHOD] [--thread THREAD] [--compress COMPRESS] [--log LOG]
+```
+```
+--bfile BFILE            Binary data file \
+--bed: BIM               Binary data file (Genotypes) \
+--bim: BIM               Binary data file (SNP info) \
+--fam: FAM               Binary data file (Individual info) \
+--block: BLOCK_FILE      Block file (Default: all SNPs are in one block)
+--snplist: SNPLIST       SNP list file (Default: all SNP pairs are calculated)
+--output: OUTPUT         Output filename (Default: LD.h5)
+--method: METHOD         Correlation estimation method, including Pearson, LW (Default: Pearson)
+--thread: THREAD         Thread number for calculation (Default: Total CPU number)
+--compress: COMPRESS     compression level for output (Default: 9)
+--log: LOG               log file (Default: plinkLD.log)
+```
 
-```GWEB [-h] --ssf SSF --ref REF [--bfile BFILE] [--bed BED] [--bim BIM] [--fam FAM] [--h5geno H5GENO] [--anno ANNO] [--snplist SNPLIST]
+
+```
+python GWEB.py [-h] --ssf SSF --ref REF [--bfile BFILE] [--bed BED] [--bim BIM] [--fam FAM] [--h5geno H5GENO] [--anno ANNO] [--snplist SNPLIST]
                [--iprefix IPREFIX] [--n N] [--K K [K ...]] [--pheno PHENO] [--mpheno MPHENO] [--pheno-name PHENO_NAME] [--cov COV] [--dir DIR] [--aligned]
                [--align-only] [--weight-only] [--thread THREAD]```
 
 GWEB: An Empirical-Bayes-based polygenic risk prediction approach using GWAS summary statistics and functional annotations
-
-Typical workflow (* indicates the step is optional.)
-
-    0a*. Use plinkLD.py to calculate LD matrix for PLINK binary format encoded genotype data of a reference panel. 
-         See plinkLD.py --help for further usage description and options.
-
-    0b*. Use formatSS.py to convert GWAS summary statistics from different cohorts into the standard input format of GWEB. 
-         See formatSS.py --help for further usage description and options.
-
-    1. Use GWEB.py to obtain SNP weights for polygenic scoring. See GWEB.py --help for further usage description and options.
-
-    2*. Use scoring.py to calculate polygenic scores for an external individual-level genotype data using SNP weights from the previous step. See scoring --help for further usage description and options.
 
   ```
   --ssf SSF                 GWAS Summary statistic File. Should be a text file with columns SNP/CHR/BP/BETA/SE
@@ -114,45 +123,4 @@ Typical workflow (* indicates the step is optional.)
   --thread THREAD           Number of parallel threads, by default all CPUs will be utilized.
   ```
 
-### Example Demonstration:
-
-Step 1: Align all datasets
-
-```ruby
-python GWEB.py --ssf GWAS_summary_stats.txt --bfile testfile --ref reference_LD.h5 --align-only --dir ./aligned --thread ${SLURM_CPUS_PER_TASK}
-```
-
-Step 2: Conducting analysis
-
-```ruby
-python GWEB.py --iprefix ./aligned/align_ --dir ./results --aligned --n ${TRAINING_SAMPLE_SIZE} --thread ${SLURM_CPUS_PER_TASK} --K 1 --weight-only
-```
-
-For demo, to obtain 10 samples after 10 burin-in samples, run GWEB.py in the directory ```prstuning```
-```ruby
-python GWEB.py --iprefix ../demo/aligned/align_ --dir ../demo/results --aligned --n 69033 --thread 4 --K 1 --weight-only --nsample 10 --nburnin 10
-```
-
-This will genererate ```../demo/results/K1_alignResult.obj``` that includes the aligned information and ```../demo/results/K1_beta_sample.txt``` that inlcudes the empirical Bayes effect sizes. These two files will be used in ```PRStuning.py``` to obtain PRStuning AUC. 
-This step should take around 10 minutes.
-
-Step 3: Calculating PRS for individuals in testing dataset.
-```ruby
-python scoring.py --h5geno ./aligned/align_geno.h5 --weight ./results/K1_weight.txt --aligned --out ./results --pheno pheno.txt --pheno-name T2D --cov covar.txt
-```
-
-# Obtain PRStuning AUC using PRStuning.py
-```
-param weight: weights of the PRS model to be evaluated, obtained from the training GWAS summary statistics dataset
-
-param beta_EB: matrix of sampled empirical Bayes beta saved to the output directory from the GWEB.py (in Step2 above, ../demo/results/K1_beta_sample.txt in demo)
-
-param n0: training data control sample size
-
-param n1: training data case sample size
-
-param alignResult: aligned object saved to the output directory from GWEB.py (in Step2 above, ../demo/results/K1_alignResult.obj in demo)
-
-return: PRStuning AUC
-```
-Runing ```PRStuning.py``` prints out the PRStuning AUC value.
+## Example Demonstration:
