@@ -14,7 +14,7 @@ Dependency:
 	pysnptools;
 	CythonGSL;
 
-## Installation
+## Installation and Compilation
 
 ### Install GSL 
 For Linux/Mac, see
@@ -42,18 +42,17 @@ rm -rf ./CythonGSL
 python setup.py build_ext --inplace
 ```
 
-Installation is expected to be within a few minutes.
+Installation is expected to be finished within a few minutes.
 
-### Compilation:
-In the directory ```prstuning```, run
-```ruby
-python setup.py build_ext --inplace
-```
-(```cython -a GWEButils_cFunc.pyx``` to check the speed bottleneck)
+## Typical Workflow:
 
-### Usage:
+0a*. Use plinkLD.py to calculate the LD matrix for PLINK binary format encoded genotype data of a reference panel.
+     See plinkLD.py --help for further usage description and options.
 
-usage: ```GWEB [-h] --ssf SSF --ref REF [--bfile BFILE] [--bed BED] [--bim BIM] [--fam FAM] [--h5geno H5GENO] [--anno ANNO] [--snplist SNPLIST]
+     
+## Usage
+
+```GWEB [-h] --ssf SSF --ref REF [--bfile BFILE] [--bed BED] [--bim BIM] [--fam FAM] [--h5geno H5GENO] [--anno ANNO] [--snplist SNPLIST]
                [--iprefix IPREFIX] [--n N] [--K K [K ...]] [--pheno PHENO] [--mpheno MPHENO] [--pheno-name PHENO_NAME] [--cov COV] [--dir DIR] [--aligned]
                [--align-only] [--weight-only] [--thread THREAD]```
 
