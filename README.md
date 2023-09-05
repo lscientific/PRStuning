@@ -12,7 +12,7 @@ Dependency:
 	cython;
 	tables;
 	pysnptools;
-	CythonGSL;
+	CythonGSL
 
 ## Installation and Compilation
 
@@ -26,10 +26,10 @@ Copy bin/libgsl-0.dll and bin/libgslcblas-0.dll into the working directory
 Special tips for installing GSL on Windows can be found at http://joonro.github.io/blog/posts/installing-gsl-and-cythongsl-in-windows/
 
 ### Install python packages via conda or pip:
-```conda install python">=3.8" scipy numpy pandas scikit-learn rpy2 cython sklearn pip```
-
+First
+```conda install python">=3.8" scipy numpy pandas scikit-learn rpy2 cython sklearn pip``` \
 or 	```pip install scipy numpy pandas scikit-learn rpy2 cython sklearn```
-
+Then
 ```
 pip install tables
 pip install pysnptools
