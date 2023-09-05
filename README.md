@@ -57,7 +57,7 @@ Installation is expected to be finished within a few minutes.
 python plinkLD.py --bfile BFILE [--bed BED] [--bim BIM] [--fam FAM] [--block: BLOCK_FILE] [--snplist SNPLIST] [--output OUTPUT] [--method METHOD] [--thread THREAD] [--compress COMPRESS] [--log LOG]
 ```
 
---bfile BFILE      &nbsp;       Binary data file \
+--bfile BFILE &nbsp; Binary data file \
 --bed: BIM                Binary data file (Genotypes) \
 --bim: BIM                Binary data file (SNP info) \
 --fam: FAM                Binary data file (Individual info) \
