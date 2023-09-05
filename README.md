@@ -82,7 +82,7 @@ python PRStuning.py --ssf SSF --weight WEIGHT --n0 N0 --n1 N1 [--pruning] [--ref
 ```--weight WEIGHT```   &nbsp;&nbsp;&nbsp;   PRS model weight file. Should be a tabular text file with the five columns being SNP/CHR/BP/A1/A2/ and the following columns correspond to weights with different PRS model parameters \
 ```--n0 N0```   &nbsp;&nbsp;&nbsp;        Control sample size of the GWAS summary statistics \
 ```--n1 N1```   &nbsp;&nbsp;&nbsp;         Case sample size of the GWAS summary statistics \
-```--pruning``` &nbsp;&nbsp;&nbsp;  If pruning, EM algorithm is used on SNPs with non-zero PRS weights. Do not provide reference LD file if pruning. If not pruning, an Gibbs-sampling-based State-Augmentation for Marginal Estimation (SAME) is used. \
+```--pruning``` &nbsp;&nbsp;&nbsp;  If not pruning, an Gibbs-sampling-based State-Augmentation for Marginal Estimation (SAME) is used. If pruning, EM algorithm is used on SNPs with non-zero PRS weights. Do not provide a reference LD file if pruning.  \
 ```--ref REF``` &nbsp;&nbsp;&nbsp;    Reference LD file. Provide if not pruning. Should be a (full path) hdf5 file  storing the LD matrix and corresponding SNP information (plinkLD.py can be used to convert PLINK binary files into the LD hdf5 file) \
 ```--homo HOMO``` &nbsp;&nbsp;&nbsp;      If the summary statistics are from a single homogeneous GWAS cohort, use homo to not to shrink LD (Default: False) \
 ```--geno GENO```  &nbsp;&nbsp;&nbsp;     Individual-level genotype data for testing purposes (if provided). Should be PLINK binary format files with extension .bed/.bim/.fam \
