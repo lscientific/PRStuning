@@ -54,7 +54,8 @@ Installation is expected to be finished within a few minutes.
      
 ## Usage
 ```
-python plinkLD.py --bfile BFILE [--bed BED] [--bim BIM] [--fam FAM] [--block: BLOCK_FILE] [--snplist SNPLIST] [--output OUTPUT] [--method METHOD] [--thread THREAD] [--compress COMPRESS] [--log LOG]
+python plinkLD.py --bfile BFILE [--bed BED] [--bim BIM] [--fam FAM] [--block: BLOCK_FILE] [--snplist SNPLIST] \
+[--output OUTPUT] [--method METHOD] [--thread THREAD] [--compress COMPRESS] [--log LOG]
 ```
 
 ```--bfile BFILE```    &nbsp;&nbsp;&nbsp;     Binary data file \
@@ -70,56 +71,23 @@ python plinkLD.py --bfile BFILE [--bed BED] [--bim BIM] [--fam FAM] [--block: BL
 ```--log: LOG```     &nbsp;&nbsp;&nbsp;     log file (Default: plinkLD.log) 
 
 
-
 ```
-python GWEB.py [-h] --ssf SSF --ref REF [--bfile BFILE] [--bed BED] [--bim BIM] [--fam FAM] [--h5geno H5GENO] [--anno ANNO] [--snplist SNPLIST]
-               [--iprefix IPREFIX] [--n N] [--K K [K ...]] [--pheno PHENO] [--mpheno MPHENO] [--pheno-name PHENO_NAME] [--cov COV] [--dir DIR] [--aligned]
-               [--align-only] [--weight-only] [--thread THREAD]```
+python PRStuning.py --ssf SSF --weight WEIGHT --n0 N0 --n1 N1 [--pruning] [--ref REF] [--homo HOMO] [--geno GENO] \
+ [--pheno PHENO] [--n N] [--dir DIR] [--thread THREAD]
+```
+```--ssf SSF```    &nbsp;&nbsp;&nbsp;      GWAS Summary statistic file. Should be a text file with columns SNP/CHR/BP/BETA/SE \
+```--weight WEIGHT```   &nbsp;&nbsp;&nbsp;   PRS model weight file. Should be a tabular text file with the five columns being SNP/CHR/BP/A1/A2/ and the following columns correspond to weights with different PRS model parameters \
+```--n0 N0```   &nbsp;&nbsp;&nbsp;        Control sample size of the GWAS summary statistics \
+```--n1 N1```   &nbsp;&nbsp;&nbsp;         Case sample size of the GWAS summary statistics \
+```--pruning``` &nbsp;&nbsp;&nbsp;  If pruning, EM algorithm is used on SNPs with non-zero PRS weights. No reference LD file is provided \
+```--ref REF``` &nbsp;&nbsp;&nbsp;    Reference LD file. Provide if not pruning. Should be a (full path) hdf5 file  storing the LD matrix and corresponding SNP information. (plinkLD.py can be used to convert PLINK binary files into the LD hdf5 file \
+```--homo HOMO``` &nbsp;&nbsp;&nbsp;      If the summary statistics are from a single homogeneous GWAS cohort, use homo to not to shrink LD (Default: False) \
+```--geno GENO```  &nbsp;&nbsp;&nbsp;     Individual-level genotype data for testing purpose (if provided) Should be PLINK binary format files with extension .bed/.bim/.fam\
+```--pheno PHENO```  &nbsp;&nbsp;&nbsp;     External phenotype file. Should be provided if geno. Should be a tabular text file. If header is not provided, the first, second columns and third columns should be FID, IID, and PHE. Otherwise, there are three columns named 'FID', 'IID' and 'PHE' \
+```--n N```  &nbsp;&nbsp;&nbsp; Sample size of the GWAS summary statistics. (If provided, LDSC will be used to adjust the inflation caused by potential confounding effect. Default: 0) \
+```--dir DIR```     &nbsp;&nbsp;&nbsp;     Output directory (Default: ./output)\
+```--thread THREAD```  &nbsp;&nbsp;&nbsp;   Number of parallel threads, by default all CPUs will be utilized. (Default: all CPUs are utilized)
 
-GWEB: An Empirical-Bayes-based polygenic risk prediction approach using GWAS summary statistics and functional annotations
 
-  ```
-  --ssf SSF                 GWAS Summary statistic File. Should be a text file with columns SNP/CHR/BP/BETA/SE
-  
-  --ref REF                 Reference LD File. Should be a (full path) hdf5 file storing the LD matrix and corresponding SNP information. (plinkLD.py can be used to convert PLINK binary files into the LD hdf5 file.)
-			
-  --bfile BFILE             Individual-level genotype data for testing purpose. Should be PLINK binary format files with extension .bed/.bim/.fam
-  
-  --bed BED                 Binary genotype data with suffix .bed (Used if bfile is not provided)
-  
-  --bim BIM                 SNP infomation file with suffix .bim (Used if bfile is not provided)
-  
-  --fam FAM                 Individual information file with suffix .fam (Used if bfile is not provided)
-  
-  --h5geno H5GENO           Individual-level genotype data with hdf5 format
-  
-  --anno ANNO               Functional annotation file. Should be a hdf5 file storing annotations for SNPs
-  
-  --snplist SNPLIST         SNP list file used to filter SNPs
-  
-  --iprefix IPREFIX         Common prefix for input files (summary statistics, reference panel, genotypes, annotations)
-  
-  --n N                     Sample size of the GWAS summary statistics. (If provided, LDSC will be used to adjust the inflation caused by potential confounding effect.)
-			
-  --K K [K ...]             Number of causal components (Default:3)
-  
-  --pheno PHENO             External phenotype file.Should be a tabular text file. If header is not provided, the first and second columns should be FID and IID, respectively. Otherwise, there are two columns named 'FID' and 'IID'
-			
-  --mpheno MPHENO           m-th phenotype in the file to be used (default: 1)
-  
-  --pheno-name PHENO_NAME   Column name for the phenotype in the phenotype file (default:PHE)
-  
-  --cov COV                 covariates file, format is tabulated file with columns FID, IID, PC1, PC2, etc.
-  
-  --dir DIR                 Output directory
-  
-  --aligned                 The input has already been aligned
-  
-  --align-only              Align all input files only
-  
-  --weight-only             Weighting only, without scoring and evaluation
-  
-  --thread THREAD           Number of parallel threads, by default all CPUs will be utilized.
-  ```
 
 ## Example Demonstration:
