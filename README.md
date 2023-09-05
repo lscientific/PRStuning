@@ -19,7 +19,7 @@ Dependency:
 ### Install GSL 
 For Linux/Mac, see
 https://solarianprogrammer.com/2020/01/26/getting-started-gsl-gnu-scientific-library-windows-macos-linux/#gsl_usage_example
-for detailed installation.
+for detailed installation
 
 For Windows, you can download the compiled library directly from https://code.google.com/p/oscats/downloads/list \
 Copy bin/libgsl-0.dll and bin/libgslcblas-0.dll into the working directory \
@@ -44,14 +44,14 @@ rm -rf ./CythonGSL
 python setup.py build_ext --inplace
 ```
 
-Installation is expected to be finished within a few minutes.
+Installation is expected to be finished within a few minutes
 
 ## Typical Workflow:
 (Optional) Use ```plinkLD.py``` to calculate the LD matrix for PLINK binary format encoded genotype data of a reference panel.
-  See ```python plinkLD.py --help``` for further usage description and options.\
+  See ```python plinkLD.py --help``` for further usage description and options\
 
   Use ```PRStuning.py``` to obtain estimated AUC using GWAS summary statistics from the training data. 
-  See ```python PRStuning.py --help``` for further usage description and options.
+  See ```python PRStuning.py --help``` for further usage description and options
 
      
 ## Usage
