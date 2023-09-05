@@ -76,7 +76,7 @@ python plinkLD.py --bfile BFILE [--bed BED] [--bim BIM] [--fam FAM] [--block: BL
 ### PRStuning.py
 ```
 python PRStuning.py --ssf SSF --weight WEIGHT --n0 N0 --n1 N1 [--pruning] [--ref REF] [--homo HOMO] [--geno GENO] \
- [--pheno PHENO] [--n N] [--dir DIR] [--thread THREAD]
+ [--pheno PHENO] [--aligned] [--n N] [--dir DIR] [--thread THREAD]
 ```
 ```--ssf SSF```    &nbsp;&nbsp;&nbsp;      GWAS Summary statistic file. Should be a text file with columns SNP/CHR/BP/BETA/SE \
 ```--weight WEIGHT```   &nbsp;&nbsp;&nbsp;   PRS model weight file. Should be a tabular text file with the five columns being SNP/CHR/BP/A1/A2/ and the following columns correspond to weights with different PRS model parameters \
@@ -87,6 +87,7 @@ python PRStuning.py --ssf SSF --weight WEIGHT --n0 N0 --n1 N1 [--pruning] [--ref
 ```--homo HOMO``` &nbsp;&nbsp;&nbsp;      If the summary statistics are from a single homogeneous GWAS cohort, use homo to not to shrink LD (Default: False) \
 ```--geno GENO```  &nbsp;&nbsp;&nbsp;     Individual-level genotype data for testing purposes (if provided). Should be PLINK binary format files with extension .bed/.bim/.fam \
 ```--pheno PHENO```  &nbsp;&nbsp;&nbsp;     External phenotype file. Should be provided if geno. Should be a tabular text file. If the header is not provided, the first, second columns and third columns should be FID, IID, and PHE. Otherwise, there are three columns named 'FID', 'IID', and 'PHE' \
+```--aligned```  &nbsp;&nbsp;&nbsp;    Whether the ssf, weight, (geno, ref) files are aligned. Do not use aligned for real data \
 ```--n N```  &nbsp;&nbsp;&nbsp; Sample size of the GWAS summary statistics. (If provided, LDSC will be used to adjust the inflation caused by potential confounding effects. Default: 0) \
 ```--dir DIR```     &nbsp;&nbsp;&nbsp;     Output directory (Default: ./output)\
 ```--thread THREAD```  &nbsp;&nbsp;&nbsp;   Number of parallel threads, by default all CPUs will be utilized (Default: all CPUs are utilized)
