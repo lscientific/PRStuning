@@ -21,8 +21,8 @@ For Linux/Mac, see
 https://solarianprogrammer.com/2020/01/26/getting-started-gsl-gnu-scientific-library-windows-macos-linux/#gsl_usage_example
 for detailed installation.
 
-For Windows, you can download the compiled library directly from https://code.google.com/p/oscats/downloads/list
-Copy bin/libgsl-0.dll and bin/libgslcblas-0.dll into the working directory
+For Windows, you can download the compiled library directly from https://code.google.com/p/oscats/downloads/list \
+Copy bin/libgsl-0.dll and bin/libgslcblas-0.dll into the working directory \
 Special tips for installing GSL on Windows can be found at http://joonro.github.io/blog/posts/installing-gsl-and-cythongsl-in-windows/
 
 ### Install python packages via conda or pip:
