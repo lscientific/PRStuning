@@ -29,15 +29,15 @@ Special tips for installing GSL on Windows can be found at http://joonro.github.
 conda install python">=3.8" scipy numpy pandas scikit-learn rpy2 cython sklearn pip
 or 	pip install scipy numpy pandas scikit-learn rpy2 cython sklearn
 
-	pip install tables
-	pip install pysnptools
-        git clone git@github.com:twiecki/CythonGSL.git
-	cd ./CythonGSL
-	python setup.py build
-	python setup.py install
-	cd ../
-	rm -rf ./CythonGSL
-	python setup.py build_ext --inplace
+pip install tables
+pip install pysnptools
+git clone git@github.com:twiecki/CythonGSL.git
+cd ./CythonGSL
+python setup.py build
+python setup.py install
+cd ../
+rm -rf ./CythonGSL
+python setup.py build_ext --inplace
 
 Installation is expected to be within a few minutes.
 
