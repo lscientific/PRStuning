@@ -48,7 +48,7 @@ Installation is expected to be finished within a few minutes.
 (Optional) Use ```plinkLD.py``` to calculate the LD matrix for PLINK binary format encoded genotype data of a reference panel.
   See ```python plinkLD.py --help``` for further usage description and options.\
 
-  Use ```PRStuning.py``` to obtain estimated AUC using GWAS summary statistics from the training data
+  Use ```PRStuning.py``` to obtain estimated AUC using GWAS summary statistics from the training data. 
   See ```python PRStuning.py --help``` for further usage description and options.
 
      
@@ -92,3 +92,6 @@ python PRStuning.py --ssf SSF --weight WEIGHT --n0 N0 --n1 N1 [--pruning] [--ref
 
 
 ## Example Demonstration:
+
+
+
