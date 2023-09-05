@@ -28,9 +28,7 @@ Special tips for installing GSL on Windows can be found at http://joonro.github.
 ### Install python packages via conda or pip:
 ```conda install python">=3.8" scipy numpy pandas scikit-learn rpy2 cython sklearn pip```
 
-or 	
-
-```pip install scipy numpy pandas scikit-learn rpy2 cython sklearn```
+or 	```pip install scipy numpy pandas scikit-learn rpy2 cython sklearn```
 
 ```
 pip install tables
