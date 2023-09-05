@@ -61,13 +61,13 @@ python plinkLD.py --bfile BFILE [--bed BED] [--bim BIM] [--fam FAM] [--block: BL
 ```--bed: BIM```   &nbsp;         Binary data file (Genotypes) \
 ```--bim: BIM```   &nbsp;         Binary data file (SNP info) \
 ```--fam: FAM```   &nbsp;         Binary data file (Individual info) \
-```--block: BLOCK_FILE``` &nbsp;  Block file (Default: all SNPs are in one block)
-```--snplist: SNPLIST``` &nbsp;    SNP list file (Default: all SNP pairs are calculated)
-```--output: OUTPUT``` &nbsp;      Output filename (Default: LD.h5)
-```--method: METHOD```  &nbsp;     Correlation estimation method, including Pearson, LW (Default: Pearson)
-```--thread: THREAD```  &nbsp;     Thread number for calculation (Default: Total CPU number)
-```--compress: COMPRESS```  &nbsp; Compression level for output (Default: 9)
-```--log: LOG```     &nbsp;      log file (Default: plinkLD.log)
+```--block: BLOCK_FILE``` &nbsp;  Block file (Default: all SNPs are in one block) \
+```--snplist: SNPLIST``` &nbsp;    SNP list file (Default: all SNP pairs are calculated) \
+```--output: OUTPUT``` &nbsp;      Output filename (Default: LD.h5) \
+```--method: METHOD```  &nbsp;     Correlation estimation method, including Pearson, LW (Default: Pearson) \
+```--thread: THREAD```  &nbsp;     Thread number for calculation (Default: Total CPU number) \
+```--compress: COMPRESS```  &nbsp; Compression level for output (Default: 9) \
+```--log: LOG```     &nbsp;      log file (Default: plinkLD.log) \
 
 
 
