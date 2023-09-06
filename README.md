@@ -100,7 +100,7 @@ python PRStuning.py --ssf SSF --weight WEIGHT --n0 N0 --n1 N1 [--pruning] [--ref
 - Testing genotype data ./simdata/geno(.bim/bed/fam) have 500 controls and 500 cases 
 - Reference data are generated from 2000 controls 
 - All datasets share the same LD structure AR(1) with rho=0.2
-- 
+  
 ### step 1
 ```
 python plinkLD.py --bfile ./simdata/ref --output ./simdata/ref.h5
