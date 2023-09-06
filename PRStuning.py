@@ -97,7 +97,6 @@ def main_with_args(args):
     startTime0 = time.time()
     parameters = parser.parse_args(args)
     p_dict = vars(parameters)
-    p_dict['n'] = p_dict['n0'] + p_dict['n1']
 
     if not os.path.exists(p_dict['dir']):
         os.makedirs(p_dict['dir'])
