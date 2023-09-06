@@ -137,6 +137,7 @@ def main(p_dict):
                                                         outRef=alignRefFile,
                                                         outAnno=os.path.join(p_dict['dir'], 'align_anno.txt'),
                                                         byID=True, complevel=9)
+            refObj = alignResult['REF']
         else:
             alignResult = PRSalign.alignSmryGeno2RefPointer(smryObj, genoObj, refObj, newLDfile, annoObj=None,
                                                             outSS=os.path.join(p_dict['dir'], 'align_ssf.txt'),
@@ -144,6 +145,7 @@ def main(p_dict):
                                                             outRef=alignRefFile,
                                                             outAnno=os.path.join(p_dict['dir'], 'align_anno.h5'),
                                                             byID=True, complevel=9)
+            refObj = alignResult['REF']
         # align weightObj with ssf
         smryObj = alignResult['SS']
         smryObj['order'] = range(smryObj.shape[0])
@@ -253,7 +255,7 @@ def main(p_dict):
             AUC_prstuning = []
             for col in range(5, weightObj.shape[1]):
                 newWeight = weightObj.iloc[:, col]
-                auc = GWEB_prstuning(newWeight, estResult['beta'], p_dict['n0'], p_dict['n1'],alignResult['REF'], alignResult['SS'])
+                auc = GWEB_prstuning(newWeight, estResult['beta'], p_dict['n0'], p_dict['n1'], refObj, alignResult['SS'])
                 AUC_prstuning.append(auc)
                 print("PRStuning AUC for parameter", weightObj.columns[col], "is", auc)
             result = pd.DataFrame(pd.Series(AUC_prstuning, index=weightObj.columns[range(5, weightObj.shape[1])]), columns=['PRStuning'])
