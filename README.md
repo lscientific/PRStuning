@@ -20,10 +20,12 @@ For Windows, you can download the compiled library directly from https://code.go
 Copy bin/libgsl-0.dll and bin/libgslcblas-0.dll into the working directory \
 Special tips for installing GSL on Windows can be found at http://joonro.github.io/blog/posts/installing-gsl-and-cythongsl-in-windows/
 
-### Install Python packages via conda or pip:
+### Install Python packages via pip:
 ```
 pip install scipy numpy pandas scikit-learn rpy2 cython matplotlib tables pysnptools CythonGSL 
 ```
+
+### Compilation
 ```
 python setup.py build_ext --inplace
 ```
