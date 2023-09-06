@@ -86,8 +86,8 @@ def main(p_dict):
         print('Can not PRS weight file :', p_dict['weight'])
         return
 
-    print('Parsing testing genotype data ...')
     if p_dict['h5geno'] is not None:
+        print('Parsing testing genotype data from', p_dict['h5geno'])
         genoStore = pd.HDFStore(p_dict['h5geno'], 'r')
         genoObj = {'SNPINFO': genoStore.get('SNPINFO'), 'INDINFO': genoStore.get('INDINFO'),
                    'GENOTYPE': genoStore.get('GENOTYPE')[0], 'FLIPINFO': genoStore.get('FLIPINFO').to_numpy()}
@@ -101,6 +101,7 @@ def main(p_dict):
         del genoStore
         # gc.collect()
     else:
+        print('Parsing testing genotype data from', p_dict['geno'])
         genoObj = PRSparser.genoParser(bfile=p_dict['geno'])
 
     if p_dict['aligned']:
@@ -138,7 +139,12 @@ def main(p_dict):
             if len(idx) > 0:
                 z = z.drop(idx).reset_index(drop=True)
                 newWeight = newWeight.drop(idx).reset_index(drop=True)
-            pi0, _, sigma2, _, _, _, _, _ = snpEM(z, maxIter=1000, tol=1e-4, beta0=len(z) / 100, info=False)
+            pi0, _, sigma2, _, _, _, Qval, _ = snpEM(z, maxIter=1000, tol=1e-4, beta0=len(z) / 100, info=False)
+            paramDF = pd.DataFrame({'pi0': pi0, 'sigma2': sigma2, 'logLik': Qval})
+            paramFile = os.path.join(p_dict['dir'], 'param.txt')
+            paramDF.to_csv(paramFile, sep='\t')
+            print('Estimated parameter values are saved to', paramFile)
+
             pi0_tilte = pi0 * norm.pdf(z) / (pi0 * norm.pdf(z) + (1 - pi0) * norm.pdf(z, scale=np.sqrt(sigma2 + 1)))
             lmd = 1 / (1 + 1 / sigma2)
             auc_post_rs = np.zeros(100)
@@ -163,24 +169,27 @@ def main(p_dict):
             isBinPhe = PRSeval.isBinary(phenoDF.loc[:, 'PHE'])
             if not isBinPhe:
                 print("Warning: phenotype needs to be binary!")
-            else:
-                print('Start calculating PRS score using plink...')
-                AUC_test = []
-                for col in range(5, alignResult['WEIGHT'].shape[1]):
-                    newWeight = alignResult['WEIGHT'].iloc[:, col]
-                    score = scoringByPlink(alignResult['GENO'], newWeight, splitByChr=False,
-                                           out=os.path.join(p_dict['dir'], 'par_' + alignResult['WEIGHT'].columns[col] + "_"),
-                                           thread=p_dict['thread'])
-                    auc = roc_auc_score(PRSeval.convert01(phenoDF.loc[:, 'PHE'].to_numpy()), score.iloc[:, 0])
-                    auc = auc if auc >= 0.5 else 1 - auc
-                    AUC_test.append(auc)
-                    print("Testing AUC for parameter", alignResult['WEIGHT'].columns[col], "is", auc)
-                if result is not None:
-                    result['Testing'] = AUC_test
+            print('Start calculating PRS score using plink...')
+            AUC_test = []
+            for col in range(5, alignResult['WEIGHT'].shape[1]):
+                newWeight = alignResult['WEIGHT'].iloc[:, col]
+                if not os.path.exists(os.path.join(p_dict['dir'] + 'prs_results/')):
+                    os.makedirs(os.path.join(p_dict['dir'] + 'prs_results/'))
+                score = scoringByPlink(alignResult['GENO'], newWeight, splitByChr=False,
+                                       out=os.path.join(p_dict['dir'] + 'prs_results/' + weightObj.columns[col] + "_"),
+                                       thread=p_dict['thread'])
+                auc = roc_auc_score(PRSeval.convert01(phenoDF.loc[:, 'PHE'].to_numpy()), score.iloc[:, 0])
+                auc = auc if auc >= 0.5 else 1 - auc
+                AUC_test.append(auc)
+                print("Testing AUC for parameter", alignResult['WEIGHT'].columns[col], "is", auc)
+            if result is not None:
+                result['Testing'] = AUC_test
+
         else:
             print("Testing genotype data not available. Not calculating testing AUC")
 
         if result is not None:
+            print("AUC results saved to", os.path.join(p_dict['dir'], "auc_results.txt"))
             result.to_csv(os.path.join(p_dict['dir'], "auc_results.txt"), header=True, index=True, sep="\t")
         else:
             print('No AUC result.')
