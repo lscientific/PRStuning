@@ -1,18 +1,7 @@
 # PRStuning: Estimate Testing AUC for Binary Phenotype Using GWAS Summary Statistics from the Training Data
 
-Python Version: >=3.8 \
-Dependencies:
-	GSL;
-	PLINK;
-	numpy;
-	scipy;
-	pandas;
-	scikit-learn;	
-	rpy2;
-	cython;
-	tables;
-	pysnptools;
-	CythonGSL
+Software dependency: Python version: >=3.8; R; PLINK; GSL (optional for speedup) \
+Python package dependency: numpy; pandas; scikit-learn;	rpy2; cython; tables; pysnptools; CythonGSL
 
 ## Installation and Compilation
 ### Download PRStuning
