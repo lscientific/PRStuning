@@ -107,13 +107,17 @@ python plinkLD.py --bfile ./simdata/ref --output ./simdata/ref.h5
 ```
 ### step 2
 ```
-python PRStuning.py --ssf ./simdata/ssf.txt --weight ./simdata/weight.txt --ref ./simdata/ref.h5 --pheno ./simdata/pheno.txt --geno ./simdata/geno --n0 5000 --n1 5000 --dir ./simdata/output/
+python PRStuning.py --ssf ./simdata/ssf.txt --weight ./simdata/weight.txt --ref ./simdata/ref.h5 \
+--pheno ./simdata/pheno.txt --geno ./simdata/geno --n0 5000 --n1 5000 --dir ./simdata/output/
 ```
 ### Results
 Since testing genotype data are provided, testing AUC is calculated.
 Testing and PRStuning AUC results are saved to ./simdata/auc_results.txt\
 Files with prefix ./simdata/align_ are aligned datasets \
-Directory ./simdata/prs_results/ contain PRS score results 
+Directory ./simdata/prs_results contains PRS scoring results using PLINK \
+param.txt contains the estimated parameters \
+beta_est.txt contains the estimated ground truth effect sizes \
+log.txt is the the log file
 
 
 
