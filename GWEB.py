@@ -11,6 +11,7 @@ import PRSeval
 from PRScoring import scoringByPlink
 from scipy.stats import norm
 from sklearn.metrics import roc_auc_score
+from plinkLD import ldscore
 
 def concat(x):
     '''
@@ -35,7 +36,8 @@ def GWEB_prstuning(weight, beta_EB, n0, n1, refObj, ssObj):
     :param alignResult: aligned object saved to the current path from GWEB.py
     :return: PRStuning AUC
     '''
-    Ne = 4 * n0 * n1 / (n0 + n1)  # effective sample size
+
+    Ne = 4 / (1/n0 + 1/n1)  # effective sample size
     n = beta_EB.shape[0] # number of empirical Bayes samples
     Rlist = refObj['LD']
     betaSE = ssObj['SE']
@@ -52,6 +54,7 @@ def GWEB_prstuning(weight, beta_EB, n0, n1, refObj, ssObj):
         end = start + bkSize[bk]
         betaBk.append(beta_EB[:, start:end])
         start = end
+
     wf_bk = np.zeros(n*bkNum).reshape((n, bkNum))  # sample_size * bkNum
     s2 = 0
     for bk in range(bkNum):
@@ -62,6 +65,7 @@ def GWEB_prstuning(weight, beta_EB, n0, n1, refObj, ssObj):
         wf_bk[:, bk] = np.matmul(np.matrix(weightBk[bk]), f_bk)
         wSE_bk = np.matrix(weightBk[bk] * SE_bk)
         s2 += np.matmul(np.matmul(wSE_bk, Rlist[bk]), np.transpose(wSE_bk))
+
     delta_samples = 2 * (np.array(np.sum(wf_bk, axis=1) / np.sqrt(2*s2))).flatten()
     delta_samples = [np.abs(delta) for delta in delta_samples]
     AUC_samples = [norm.cdf(i) for i in delta_samples]
@@ -94,10 +98,8 @@ def main(p_dict):
     print('Reading reference panel from', p_dict['ref'])
     refObj, newLDfile = PRSparser.refParser(p_dict['ref'], snpListFile=None, thread=p_dict['thread'])
 
-    if not ((p_dict['h5geno'] is None) and (p_dict['geno'] is None)):
-        print('Parsing testing genotype data ...')
-
     if p_dict['h5geno'] is not None:
+        print('Parsing testing genotype data from', p_dict['h5geno'])
         genoStore = pd.HDFStore(p_dict['h5geno'], 'r')
         genoObj = {'SNPINFO': genoStore.get('SNPINFO'), 'INDINFO': genoStore.get('INDINFO'),
                    'GENOTYPE': genoStore.get('GENOTYPE')[0], 'FLIPINFO': genoStore.get('FLIPINFO').to_numpy()}
@@ -111,6 +113,7 @@ def main(p_dict):
         del genoStore
         # gc.collect()
     else:
+        print('Parsing testing genotype data from', p_dict['geno'])
         genoObj = PRSparser.genoParser(bfile=p_dict['geno'])
 
     if p_dict['aligned']:
@@ -228,7 +231,7 @@ def main(p_dict):
             paramFile = os.path.join(p_dict['dir'], 'param.txt')
             paramDF.to_csv(paramFile, sep='\t')
             print('Estimated parameter values are saved to', paramFile)
-            # np.savetxt(os.path.join(p_dict['dir'], 'beta_sample.txt'), estResult['beta'], fmt="%f", delimiter="\t")
+            np.savetxt(os.path.join(p_dict['dir'], 'beta_sample.txt'), estResult['beta'], fmt="%f", delimiter="\t")
 
             if 'GENO' in alignResult:
                 betaObj = alignResult['GENO']['SNPINFO'][['RAW_SNP', 'RAW_A1']].copy()
@@ -262,22 +265,27 @@ def main(p_dict):
             isBinPhe = PRSeval.isBinary(phenoDF.loc[:, 'PHE'])
             if not isBinPhe:
                 print("Warning: phenotype needs to be binary! Not returning testing AUC")
-            else:
-                print('Start calculating PRS score using plink...')
-                for col in range(5, weightObj.shape[1]):
-                    newWeight = weightObj.iloc[:, col]
-                    score = scoringByPlink(alignResult['GENO'], newWeight, splitByChr=False,
-                                           out=os.path.join(p_dict['dir'], 'par_' + weightObj.columns[col] + "_"),
-                                           thread=p_dict['thread'])
-                    AUC_test = roc_auc_score(PRSeval.convert01(phenoDF.loc[:, 'PHE'].to_numpy()), score.iloc[:, 0])
-                    AUC_test = AUC_test if AUC_test >= 0.5 else 1 - AUC_test
-                    print("Testing AUC for parameter", weightObj.columns[col], "is", AUC_test)
-                if result is not None:
-                    result['Testing'] = AUC_test
+            print('Start calculating PRS score using plink...')
+            AUC_test = []
+            for col in range(5, weightObj.shape[1]):
+                newWeight = weightObj.iloc[:, col]
+                if not os.path.exists(os.path.join(p_dict['dir'] + 'prs_results/')):
+                    os.makedirs(os.path.join(p_dict['dir'] + 'prs_results/'))
+                score = scoringByPlink(alignResult['GENO'], newWeight, splitByChr=False,
+                                       out=os.path.join(p_dict['dir'] + 'prs_results/' + weightObj.columns[col] + "_"),
+                                       thread=p_dict['thread'])
+                auc = roc_auc_score(PRSeval.convert01(phenoDF.loc[:, 'PHE'].to_numpy()), score.iloc[:, 0])
+                auc = auc if auc >= 0.5 else 1 - auc
+                AUC_test.append(auc)
+                print("Testing AUC for parameter", weightObj.columns[col], "is", auc)
+            if result is not None:
+                result['Testing'] = AUC_test
+
         else:
             print("Testing genotype data not available. Not calculating testing AUC")
 
         if result is not None:
+            print("AUC results saved to", os.path.join(p_dict['dir'], "auc_results.txt"))
             result.to_csv(os.path.join(p_dict['dir'], "auc_results.txt"), header=True, index=True, sep="\t")
         else:
             print('No AUC result.')
