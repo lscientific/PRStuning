@@ -15,6 +15,11 @@ Dependencies:
 	CythonGSL
 
 ## Installation and Compilation
+```wget https://github.com/lingc77/PRStuning/archive/refs/heads/master.zip -O PRStuning.zip```
+```unzip PRStuning.zip```
+```rm PRStuning.zip```
+```cd ./PRStuning-master```
+
 
 ### Install GSL 
 For Linux/Mac, see
