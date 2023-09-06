@@ -1,7 +1,7 @@
 # PRStuning: Estimate Testing AUC for Binary Phenotype Using GWAS Summary Statistics from the Training Data
 
 Software dependency: Python version: >=3.8; R; PLINK; GSL (optional for speedup) \
-Python package dependency: numpy; pandas; scikit-learn;	rpy2; cython; tables; pysnptools; CythonGSL
+Python package dependency: numpy; pandas; scipy; scikit-learn;	rpy2; cython; tables; pysnptools; CythonGSL
 
 ## Installation and Compilation
 ### Download PRStuning
@@ -21,21 +21,10 @@ Copy bin/libgsl-0.dll and bin/libgslcblas-0.dll into the working directory \
 Special tips for installing GSL on Windows can be found at http://joonro.github.io/blog/posts/installing-gsl-and-cythongsl-in-windows/
 
 ### Install Python packages via conda or pip:
-First 
-
-```conda install python">=3.8" scipy numpy pandas scikit-learn rpy2 cython sklearn pip``` \
-or 	```pip install scipy numpy pandas scikit-learn rpy2 cython sklearn``` 
-
-Then
 ```
-pip install tables
-pip install pysnptools
-git clone git@github.com:twiecki/CythonGSL.git
-cd ./CythonGSL
-python setup.py build
-python setup.py install
-cd ../
-rm -r ./CythonGSL
+pip install scipy numpy pandas scikit-learn rpy2 cython matplotlib tables pysnptools CythonGSL 
+```
+```
 python setup.py build_ext --inplace
 ```
 
