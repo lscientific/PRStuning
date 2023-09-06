@@ -91,12 +91,13 @@ python PRStuning.py --ssf SSF --weight WEIGHT --n0 N0 --n1 N1 [--pruning] [--ref
 When ```--pruning``` is not used, the SNPs are treated as dependent. Thus use Gibbs sampling-based SAME algorithm to estimate.
 - Step 1
 ```
-python plinkLD.py --bfile ./simdata/ref --output ./simdata/ref.h5
+python plinkLD.py --bfile ./simdata/ref --output ./simdata/ref.h5 
 ```
 - Step 2
+Use ```--homo``` here since using simulated GWAS data. For real GWAS summary data that are from a single homogeneous GWAS cohort, do not use this option
 ```
 python PRStuning.py --ssf ./simdata/ssf.txt --weight ./simdata/weight_ldpred.txt --ref ./simdata/ref.h5 \
---pheno ./simdata/pheno.txt --geno ./simdata/geno --n0 5000 --n1 5000 --dir ./simdata/output/
+--pheno ./simdata/pheno.txt --geno ./simdata/geno --n0 5000 --n1 5000 --dir ./simdata/output/ --homo
 ```
 - Results
 	Testing and PRStuning AUC results are saved to ```./simdata/output/auc_results.txt```. Each row corresponds to a PRS parameter and the two columns correspond to PRStuning AUC and testing AUC respectively 
