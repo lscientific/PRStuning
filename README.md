@@ -11,7 +11,7 @@ Python package dependency: numpy; pandas; scipy; scikit-learn;	rpy2; cython; tab
 ```cd ./PRStuning-master```
 
 
-### Install GSL 
+### Install GSL (optional for speedup)
 For Linux/Mac, see
 https://solarianprogrammer.com/2020/01/26/getting-started-gsl-gnu-scientific-library-windows-macos-linux/#gsl_usage_example
 for detailed installation
