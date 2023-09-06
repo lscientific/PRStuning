@@ -15,6 +15,7 @@ Dependencies:
 	CythonGSL
 
 ## Installation and Compilation
+### Download PRStuning
 ```wget https://github.com/lingc77/PRStuning/archive/refs/heads/master.zip -O PRStuning.zip``` \
 ```unzip PRStuning.zip``` \
 ```rm PRStuning.zip``` \
