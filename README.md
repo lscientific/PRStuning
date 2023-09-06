@@ -103,6 +103,7 @@ python PRStuning.py --ssf SSF --weight WEIGHT --n0 N0 --n1 N1 [--pruning] [--ref
 - Weight file weight_pt.txt only contains independent SNPs after pruning, for --pruning option. The parameters are p-value thresholds
 
 ### Not pruning
+When ```--pruning``` is not used, the SNPs are treated as dependent. Thus use Gibbs sampling-based SAME algorithm to estimate.
 - Step 1
 ```
 python plinkLD.py --bfile ./simdata/ref --output ./simdata/ref.h5
@@ -121,7 +122,7 @@ python PRStuning.py --ssf ./simdata/ssf.txt --weight ./simdata/weight_ldpred.txt
 	File ```./simdata/output/log.txt``` is the log file
 
 ### Pruning
-- No reference data should be provided
+When ```--pruning``` is not used, the SNPs are treated as independent. Thus use EM algorithm to estimate. No reference data should be provided
 ```
 python PRStuning.py --ssf ./simdata/ssf.txt --weight ./simdata/weight_pt.txt --pheno ./simdata/pheno.txt --geno ./simdata/geno --n1 5000 --n0 5000 --dir ./simdata/output_pt/ --pruning 
 ```
