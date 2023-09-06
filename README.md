@@ -70,9 +70,9 @@ python PRStuning.py --ssf SSF --weight WEIGHT --n0 N0 --n1 N1 [--pruning] [--ref
 ```--n1 N1```   &nbsp;&nbsp;&nbsp;         Case sample size of the GWAS summary statistics \
 ```--pruning``` &nbsp;&nbsp;&nbsp;  If not pruning, an Gibbs-sampling-based State-Augmentation for Marginal Estimation (SAME) is used. If pruning, EM algorithm is used on SNPs with non-zero PRS weights. Do not provide a reference LD file if pruning.  \
 ```--ref REF``` &nbsp;&nbsp;&nbsp;    Reference LD file. Provide if not pruning. Should be a (full path) hdf5 file  storing the LD matrix and corresponding SNP information (plinkLD.py can be used to convert PLINK binary files into the LD hdf5 file) \
-```--homo HOMO``` &nbsp;&nbsp;&nbsp;      If the summary statistics are from a single homogeneous GWAS cohort, use homo to not to shrink LD (Default: False) \
+```--homo HOMO``` &nbsp;&nbsp;&nbsp;      If the summary statistics are from a single homogeneous GWAS cohort, use --homo option to not further shrink LD (Default: False) \
 ```--geno GENO```  &nbsp;&nbsp;&nbsp;     Individual-level genotype data for testing purposes (if provided). Should be PLINK binary format files with extension .bed/.bim/.fam \
-```--pheno PHENO```  &nbsp;&nbsp;&nbsp;     External phenotype file. Should be provided if geno. Should be a tabular text file. If the header is not provided, the first, second columns and third columns should be FID, IID, and PHE. Otherwise, there are three columns named 'FID', 'IID', and 'PHE' \
+```--pheno PHENO```  &nbsp;&nbsp;&nbsp;     External phenotype data in a tabluar text file. Should be provided if testing genotype data are provided. If the header is not provided, the first, second columns and third columns should be FID, IID, and PHE. Otherwise, there are three columns named 'FID', 'IID', and 'PHE' \
 ```--n N```  &nbsp;&nbsp;&nbsp; Sample size of the GWAS summary statistics. (If provided, LDSC will be used to adjust the inflation caused by potential confounding effects. Default: 0) \
 ```--dir DIR```     &nbsp;&nbsp;&nbsp;     Output directory (Default: ./output)\
 ```--thread THREAD```  &nbsp;&nbsp;&nbsp;   Number of parallel threads, by default all CPUs will be utilized (Default: all CPUs are utilized)
