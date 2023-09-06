@@ -95,7 +95,7 @@ python PRStuning.py --ssf SSF --weight WEIGHT --n0 N0 --n1 N1 [--pruning] [--ref
 ## Example Demonstration:
 
 ./simdata/: Simulated data with correlated SNPs \
-(*)GWAS training dataset ssf.txt sample size N0=5000, N1=5000 \
+- GWAS training dataset ssf.txt sample size N0=5000, N1=5000 \
 *Weight file weight.txt is generated using LDpred (https://github.com/bvilhjal/ldpred) \
 *Testing genotype data ./simdata/geno(.bim/bed/fam) have 500 controls and 500 cases \
 *Reference data are generated from 2000 controls \
