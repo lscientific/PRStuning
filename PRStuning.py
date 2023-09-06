@@ -80,9 +80,6 @@ parser.add_argument('--pheno', type=str, default=None, required=('--geno' in sys
 parser.add_argument('--aligned', default=False, action='store_true',
                     help='Whether the ssf, weight, (geno, ref) files are aligned. Do not use aligned for real data')
 
-parser.add_argument('--n', type=int, default=0, required=False,
-                    help='Sample size of the GWAS summary statistics. (If provided, LDSC will be used to adjust the inflation caused by potential confounding effect.)')
-
 parser.add_argument('--dir', type=str, default='./output', required=False,
                     help='Output directory')
 
@@ -100,6 +97,7 @@ def main_with_args(args):
     startTime0 = time.time()
     parameters = parser.parse_args(args)
     p_dict = vars(parameters)
+    p_dict['n'] = p_dict['n0'] + p_dict['n1']
 
     if not os.path.exists(p_dict['dir']):
         os.makedirs(p_dict['dir'])
