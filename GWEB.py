@@ -62,8 +62,8 @@ def GWEB_prstuning(weight, beta_EB, n0, n1, refObj, ssObj):
         R_beta = np.matmul(Rlist[bk], np.transpose(np.matmul(betaBk[bk], np.diag(1/betaSE_Bk[bk]))))
         f_bk = np.matmul(np.diag(SE_bk), R_beta)
         f_bk = f_bk / np.sqrt(Ne)
-        wf_bk[:, bk] = np.matmul(np.matrix(weightBk[bk]), f_bk)
-        wSE_bk = np.matrix(weightBk[bk] * SE_bk)
+        wf_bk[:, bk] = np.matmul(np.array(weightBk[bk]), f_bk)
+        wSE_bk = np.array(weightBk[bk] * SE_bk)
         s2 += np.matmul(np.matmul(wSE_bk, Rlist[bk]), np.transpose(wSE_bk))
 
     delta_samples = 2 * (np.array(np.sum(wf_bk, axis=1) / np.sqrt(2*s2))).flatten()
