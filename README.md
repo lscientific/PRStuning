@@ -40,7 +40,7 @@ cd ./CythonGSL
 python setup.py build
 python setup.py install
 cd ../
-rm --r ./CythonGSL
+rm -r ./CythonGSL
 python setup.py build_ext --inplace
 ```
 
