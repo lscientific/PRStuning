@@ -25,7 +25,7 @@ For Windows, you can download the compiled library directly from https://code.go
 Copy bin/libgsl-0.dll and bin/libgslcblas-0.dll into the working directory \
 Special tips for installing GSL on Windows can be found at http://joonro.github.io/blog/posts/installing-gsl-and-cythongsl-in-windows/
 
-### Install python packages via conda or pip:
+### Install Python packages via conda or pip:
 First 
 
 ```conda install python">=3.8" scipy numpy pandas scikit-learn rpy2 cython sklearn pip``` \
@@ -55,7 +55,7 @@ Installation is expected to be finished within a few minutes
 
      
 ## Usage
-### plinkLD.py (optional step)
+### plinkLD.py (optional)
 ```
 python plinkLD.py --bfile BFILE [--bed BED] [--bim BIM] [--fam FAM] [--block: BLOCK_FILE] [--snplist SNPLIST] \
 [--output OUTPUT] [--method METHOD] [--thread THREAD] [--compress COMPRESS] [--log LOG]
@@ -101,11 +101,11 @@ python PRStuning.py --ssf SSF --weight WEIGHT --n0 N0 --n1 N1 [--pruning] [--ref
 - Reference data are generated from 2000 controls 
 - All datasets share the same LD structure AR(1) with rho=0.2
   
-### step 1
+### Step 1
 ```
 python plinkLD.py --bfile ./simdata/ref --output ./simdata/ref.h5
 ```
-### step 2
+### Step 2
 ```
 python PRStuning.py --ssf ./simdata/ssf.txt --weight ./simdata/weight.txt --ref ./simdata/ref.h5 \
 --pheno ./simdata/pheno.txt --geno ./simdata/geno --n0 5000 --n1 5000 --dir ./simdata/output/
