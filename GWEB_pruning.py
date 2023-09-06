@@ -118,8 +118,8 @@ def main(p_dict):
         smryObj = smryObj.merge(SNPs_intersect, how='inner', on='SNP')
         if genoObj is not None:
             # Without testing genotype data
-            alignResult = PRSalign.alignSmry2Geno(smryObj, genoObj, outSmry = os.path.join(p_dict['out'], 'align_ssf.txt'),
-                                                  outGeno=os.path.join(p_dict['out'], 'align_geno.h5'), byID=True, complevel=9)
+            alignResult = PRSalign.alignSmry2Geno(smryObj, genoObj, outSmry = os.path.join(p_dict['dir'], 'align_ssf.txt'),
+                                                  outGeno=os.path.join(p_dict['dir'], 'align_geno.h5'), byID=True, complevel=9)
         smryObj = alignResult['SS']
         smryObj['order'] = range(smryObj.shape[0])
         weightObj = weightObj.merge(smryObj.loc[:, ["SNP", 'order']], how='inner', on='SNP')
