@@ -129,22 +129,17 @@ def main(p_dict):
     if not p_dict['align-only']:
         result = None
         # PRStuning AUC
+        z = alignResult['SS']['BETA'] / alignResult['SS']['SE']
+        pi0, _, sigma2, _, _, _, Qval, _ = snpEM(z, maxIter=1000, tol=1e-4, beta0=len(z) / 100, info=False)
+        paramDF = pd.DataFrame({'pi0': [pi0], 'sigma2': [sigma2], 'logLik': [Qval]})
+        paramFile = os.path.join(p_dict['dir'], 'param.txt')
+        paramDF.to_csv(paramFile, sep='\t')
+        print('Estimated parameter values are saved to', paramFile)
+
         Ne = 4 / (1 / p_dict['n0'] + 1 / p_dict['n1'])
         AUC_prstuning = []
         for col in range(5, alignResult['WEIGHT'].shape[1]):
-            z = alignResult['SS']['BETA'] / alignResult['SS']['SE']
             newWeight = alignResult['WEIGHT'].iloc[:, col]
-            # only use SNPs with non-zero weight: pruning
-            idx = (np.where(newWeight == 0)[0]).tolist()
-            if len(idx) > 0:
-                z = z.drop(idx).reset_index(drop=True)
-                newWeight = newWeight.drop(idx).reset_index(drop=True)
-            pi0, _, sigma2, _, _, _, Qval, _ = snpEM(z, maxIter=1000, tol=1e-4, beta0=len(z) / 100, info=False)
-            paramDF = pd.DataFrame({'pi0': [pi0], 'sigma2': [sigma2], 'logLik': [Qval]})
-            paramFile = os.path.join(p_dict['dir'], 'param.txt')
-            paramDF.to_csv(paramFile, sep='\t')
-            print('Estimated parameter values are saved to', paramFile)
-
             pi0_tilte = pi0 * norm.pdf(z) / (pi0 * norm.pdf(z) + (1 - pi0) * norm.pdf(z, scale=np.sqrt(sigma2 + 1)))
             lmd = 1 / (1 + 1 / sigma2)
             auc_post_rs = np.zeros(100)
@@ -155,7 +150,7 @@ def main(p_dict):
                     if c == 0:
                         z_post_rs[m] = np.random.normal(lmd * z[m], np.sqrt(lmd), 1)
                 delta_post_rs = 2 * np.sum(
-                    newWeight * z_post_rs * alignResult['SS']['SE'].drop(idx) / np.sqrt(Ne)) / np.sqrt(np.sum(newWeight ** 2 * 2 * alignResult['SS']['SE'].drop(idx) ** 2))
+                    newWeight * z_post_rs * alignResult['SS']['SE'] / np.sqrt(Ne)) / np.sqrt(np.sum(newWeight ** 2 * 2 * alignResult['SS']['SE'] ** 2))
                 auc_post_rs[j] = norm.cdf(np.abs(delta_post_rs))
             auc = np.mean(auc_post_rs)
             AUC_prstuning.append(auc)
