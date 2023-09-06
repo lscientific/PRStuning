@@ -140,7 +140,7 @@ def main(p_dict):
                 z = z.drop(idx).reset_index(drop=True)
                 newWeight = newWeight.drop(idx).reset_index(drop=True)
             pi0, _, sigma2, _, _, _, Qval, _ = snpEM(z, maxIter=1000, tol=1e-4, beta0=len(z) / 100, info=False)
-            paramDF = pd.DataFrame({'pi0': pi0, 'sigma2': sigma2, 'logLik': Qval})
+            paramDF = pd.DataFrame({'pi0': [pi0], 'sigma2': [sigma2], 'logLik': [Qval]})
             paramFile = os.path.join(p_dict['dir'], 'param.txt')
             paramDF.to_csv(paramFile, sep='\t')
             print('Estimated parameter values are saved to', paramFile)
