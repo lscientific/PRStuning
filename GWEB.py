@@ -154,6 +154,7 @@ def main(p_dict):
         print('After alignment,', len(alignResult['SS']), 'SNPs remaining')
 
     if not p_dict['align-only']:
+        p_dict['n'] = p_dict['n0'] + p_dict['n1']
         result = None
         if 'N' in alignResult['SS'].columns:
             rawN = p_dict['n']
