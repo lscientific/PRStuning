@@ -93,8 +93,27 @@ python PRStuning.py --ssf SSF --weight WEIGHT --n0 N0 --n1 N1 [--pruning] [--ref
 ```--thread THREAD```  &nbsp;&nbsp;&nbsp;   Number of parallel threads, by default all CPUs will be utilized (Default: all CPUs are utilized)
 
 
-
 ## Example Demonstration:
+
+./simdata/: Simulated data with correlated SNPs \
+GWAS training dataset ssf.txt sample size N0=5000, N1=5000 \
+Weight file weight.txt is generated using LDpred (https://github.com/bvilhjal/ldpred) \
+Testing genotype data ./simdata/geno(.bim/bed/fam) have 500 controls and 500 cases \
+Reference data are generated from 2000 controls \
+All datasets share the same LD structure AR(1) with rho=0.2
+### step 1
+```
+python plinkLD.py --bfile ./simdata/ref --output ./simdata/ref.h5
+```
+### step 2
+```
+python PRStuning.py --ssf ./simdata/ssf.txt --weight ./simdata/weight.txt --ref ./simdata/ref.h5 --pheno ./simdata/pheno.txt --geno ./simdata/geno --n0 5000 --n1 5000 --dir ./simdata/output/
+```
+### Results
+Since testing genotype data are provided, testing AUC is calculated.
+Testing and PRStuning AUC results are saved to ./simdata/auc_results.txt\
+Files with prefix ./simdata/align_ are aligned datasets \
+Directory ./simdata/prs_results/ contain PRS score results 
 
 
 
