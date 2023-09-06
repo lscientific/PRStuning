@@ -6,8 +6,6 @@ try:
 except ModuleNotFoundError:
     from GWEButils_cFunc import *
 from scipy.stats import norm
-from arspy import ars
-from statsmodels.discrete.discrete_model import Probit
 import warnings, time
 
 def isnumeric(array):
