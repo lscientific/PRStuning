@@ -82,10 +82,10 @@ python PRStuning.py --ssf SSF --weight WEIGHT --n0 N0 --n1 N1 [--pruning] [--ref
 ./simdata/: Simulated data with correlated SNPs 
 - GWAS training dataset ssf.txt sample size N0=5000, N1=5000 
 - Weight file weight_ldpred.txt is generated using LDpred (https://github.com/bvilhjal/ldpred). The parameters are the fractions of causal markers
+- Weight file weight_pt.txt only contains independent SNPs after pruning. The parameters are p-value thresholds
 - Testing genotype data ./simdata/geno(.bim/bed/fam) have 500 controls and 500 cases 
 - Reference data are generated from 2000 controls 
 - All datasets share the same LD structure AR(1) with rho=0.2
-- Weight file weight_pt.txt only contains independent SNPs after pruning, for --pruning option. The parameters are p-value thresholds
 
 ### Not pruning
 When ```--pruning``` is not used, the SNPs are treated as dependent. Thus use Gibbs sampling-based SAME algorithm to estimate.
