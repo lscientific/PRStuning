@@ -110,9 +110,9 @@ def main_with_args(args):
         # align using GWEB_pruning: no need to align ref file
         p_dict['h5geno'] = None
         p_dict['iprefix'] = None
-        p_dict['align-only'] = True
         p_dict['aligned'] = False
-        # GWEB_pruning.main(p_dict)
+        p_dict['align-only'] = True
+        GWEB_pruning.main(p_dict)
         print('Alignment time elapsed:', time.time() - startTime0, 's')
 
         # PRStuning: EM
@@ -123,11 +123,11 @@ def main_with_args(args):
 
     else:
         # align using GWEB
-        p_dict['h5geno'] = None
         p_dict['iprefix'] = None
-        p_dict['align-only'] = True
+        p_dict['h5geno'] = None
         p_dict['aligned'] = False
-        # GWEB.main(p_dict)
+        p_dict['align-only'] = True
+        GWEB.main(p_dict)
         print('Alignment time elapsed:', time.time() - startTime0, 's')
 
         # PRStuning: MCMC
