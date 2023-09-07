@@ -5,7 +5,7 @@ Python package dependency: numpy; pandas; scipy; scikit-learn;	rpy2; cython; tab
 
 ## Installation and Compilation
 ### Download PRStuning
-```wget https://github.com/lsientific/PRStuning/archive/refs/heads/master.zip -O PRStuning.zip``` \
+```wget https://github.com/lscientific/PRStuning/archive/refs/heads/master.zip -O PRStuning.zip``` \
 ```unzip PRStuning.zip``` \
 ```rm PRStuning.zip``` \
 ```cd ./PRStuning-master```
