@@ -80,6 +80,7 @@ python PRStuning.py --ssf SSF --weight WEIGHT --n0 N0 --n1 N1 [--pruning] [--ref
 The reference panel based on the 1000 Genomes Project is available [here](https://figshare.com/s/8fc8167b4b5569e53f78 )
 - 1000G.EUR.QC.bim&fam&bed are the 1000G plink files
 - fourier_ls-all.bed is the SNP block file
+  
 Generate the LD matrix file using ```plinkLD.py```
 ```
 python plinkLD.py --bfile 1000G.EUR.QC --block fourier_ls-all.bed --out LD.h5
