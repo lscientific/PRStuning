@@ -113,7 +113,7 @@ python PRStuning.py --ssf ./simdata/ssf.txt --weight ./simdata/weight_ldpred.txt
 ```
 - Results
   \
-  	```./simdata/ref.log``` is the log file for plinkLD.py
+  	```./simdata/ref.log``` is the log file for plinkLD.py \
 	Testing and PRStuning AUC results are saved to ```./simdata/output/auc_results.txt```. Each row corresponds to a PRS parameter and the two columns correspond to PRStuning AUC and testing AUC respectively 
 	Files with prefix ```./simdata/output/align_``` are aligned datasets 
 	Directory ```./simdata/output/prs_results/``` contains PRS scoring results using PLINK 
@@ -128,7 +128,7 @@ python PRStuning.py --ssf ./simdata/ssf.txt --weight ./simdata/weight_pt.txt --p
 ```
 - Results
   \
- 	Testing and PRStuning AUC results are saved to ```./simdata/output_pt/auc_results.txt```. Each row corresponds to a PRS parameter and the two columns correspond to PRStuning AUC and testing AUC respectively
+ 	Testing and PRStuning AUC results are saved to ```./simdata/output_pt/auc_results.txt```. Each row corresponds to a PRS parameter and the two columns correspond to PRStuning AUC and testing AUC respectively \
   	Files with prefix ```./simdata/output_pt/align_``` are aligned datasets
   	Directory ```./simdata/output_pt/prs_results/``` contains PRS scoring results using PLINK
   	File ```./simdata/output_pt/param.txt``` contains the estimated parameters using EM algorithm
