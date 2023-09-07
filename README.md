@@ -77,15 +77,17 @@ python PRStuning.py --ssf SSF --weight WEIGHT --n0 N0 --n1 N1 [--pruning] [--ref
 ```--thread THREAD```  &nbsp;&nbsp;&nbsp;   Number of parallel threads, by default all CPUs will be utilized (Default: all CPUs are utilized)
 
 ## Reference Data
-The reference panel and corresponding LD matrix based on the 1000 Genomes Project are available [here](https://figshare.com/s/8fc8167b4b5569e53f78 )
-- 1000G.EUR.QC.bim&fam&bed are the 1000G dataset 
+The reference panel based on the 1000 Genomes Project is available [here](https://figshare.com/s/8fc8167b4b5569e53f78 )
+- 1000G.EUR.QC.bim&fam&bed are the 1000 Genome plink files
 - fourier_ls-all.bed is the SNP block file
-- ld_1kg_EUR_hm3_shrink.h5 is the LD file
-  
-You can also generate the LD file using ```plinkLD.py```. For real data applications, use the SNP block file.
+Generate the LD matrix file using ```plinkLD.py```
 ```
 python plinkLD.py --bfile 1000G.EUR.QC --block fourier_ls-all.bed --out LD.h5
 ```
+
+The LD matrix file for European 1000 Genomes data is available [here]()
+- ld_1kg_EUR_hm3_shrink.h5 is the LD matrix file
+  
 
 
 ## Example Demonstration:
