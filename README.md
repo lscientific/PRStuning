@@ -82,7 +82,7 @@ The reference panel and corresponding LD matrix based on the 1000 Genomes Projec
 - fourier_ls-all.bed is the SNP block file
 - ld_1kg_EUR_hm3_shrink.h5 is the LD file
   
-You can also generate the LD file using ```plinkLD.py```
+You can also generate the LD file using ```plinkLD.py```. For real data applications, use the SNP block file.
 ```
 python plinkLD.py --bfile 1000G.EUR.QC --block fourier_ls-all.bed --out LD.h5
 ```
