@@ -9,10 +9,12 @@ import math
 from scipy.stats import norm
 from sklearn.metrics import roc_auc_score
 
+
 def logF(x):
     return 0 if x == 0 else math.log(x)
 
 logF = np.vectorize(logF)
+
 
 def nanVal(x):
     return 0 if math.isnan(x) else x
@@ -132,7 +134,8 @@ def main(p_dict):
         weightObj.to_csv(os.path.join(p_dict['dir'], 'align_weight.txt'), sep='\t', index=False)
 
     if not p_dict['align-only']:
-        result = None
+        pars_test = None
+        AUC_test = None
         # PRStuning AUC
         z = alignResult['SS']['BETA'] / alignResult['SS']['SE']
         pi0, _, sigma2, _, _, _, Qval, _ = snpEM(z, maxIter=1000, tol=1e-4, beta0=len(z) / 100, info=False)
@@ -160,8 +163,8 @@ def main(p_dict):
             auc = np.mean(auc_post_rs)
             AUC_prstuning.append(auc)
             print("PRStuning AUC for parameter", alignResult['WEIGHT'].columns[col], "is", auc)
-
         result = pd.DataFrame(pd.Series(AUC_prstuning, index=alignResult['WEIGHT'].columns[range(5, alignResult['WEIGHT'].shape[1])]), columns=['PRStuning'])
+        pars_prstuning = weightObj.columns[AUC_prstuning.index(max(AUC_prstuning)) + 5]
 
         # testing AUC
         if genoObj is not None:
@@ -182,8 +185,7 @@ def main(p_dict):
                 auc = auc if auc >= 0.5 else 1 - auc
                 AUC_test.append(auc)
                 print("Testing AUC for parameter", alignResult['WEIGHT'].columns[col], "is", auc)
-            if result is not None:
-                result['Testing'] = AUC_test
+            result['Testing'] = AUC_test
 
         else:
             print("Testing genotype data not available. Not calculating testing AUC")
@@ -193,5 +195,15 @@ def main(p_dict):
             result.to_csv(os.path.join(p_dict['dir'], "auc_results.txt"), header=True, index=True, sep="\t")
         else:
             print('No AUC result.')
+
+        print("The best-performing parameter based on PRStuning:", pars_prstuning)
+        if pars_test is not None:
+            print("The best-performing parameter based on testing data:", pars_test)
+            
+        if AUC_test is not None:
+            cor = np.corrcoef(AUC_prstuning, AUC_test)[0, 1]
+            rd = abs(max(AUC_prstuning) - max(AUC_test)) / max(AUC_test)
+            print("The correlation between AUCs from PRStuning and testing data is", "{:.4g}".format(cor))
+            print("The relative difference between AUC from PRStuing and testing data is", "{:.4g}".format(rd))
 
 
