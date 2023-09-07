@@ -158,6 +158,10 @@ def main(p_dict):
     if not p_dict['align-only']:
         p_dict['n'] = p_dict['n0'] + p_dict['n1']
         result = None
+        pars_prstuning = None
+        pars_test = None
+        AUC_prstuning = None
+        AUC_test = None
         if 'N' in alignResult['SS'].columns:
             rawN = p_dict['n']
             N90 = np.quantile(alignResult['SS']['N'], 0.9)
@@ -259,6 +263,7 @@ def main(p_dict):
                 AUC_prstuning.append(auc)
                 print("PRStuning AUC for parameter", weightObj.columns[col], "is", auc)
             result = pd.DataFrame(pd.Series(AUC_prstuning, index=weightObj.columns[range(5, weightObj.shape[1])]), columns=['PRStuning'])
+            pars_prstuning = weightObj.columns[AUC_prstuning.index(max(AUC_prstuning)) + 5]
         else:
             print("Five times tried! Can't find a converged chain. Not returning PRStuning AUC")
 
@@ -281,9 +286,9 @@ def main(p_dict):
                 auc = auc if auc >= 0.5 else 1 - auc
                 AUC_test.append(auc)
                 print("Testing AUC for parameter", weightObj.columns[col], "is", auc)
+            pars_test = weightObj.columns[AUC_test.index(max(AUC_test)) + 5]
             if result is not None:
                 result['Testing'] = AUC_test
-
         else:
             print("Testing genotype data not available. Not calculating testing AUC")
 
@@ -292,3 +297,13 @@ def main(p_dict):
             result.to_csv(os.path.join(p_dict['dir'], "auc_results.txt"), header=True, index=True, sep="\t")
         else:
             print('No AUC result.')
+
+        if pars_prstuning is not None:
+            print("The best-performing parameter based on PRStuning:", pars_prstuning)
+        if pars_test is not None:
+            print("The best-performing parameter based on testing data:", pars_test)
+        if (AUC_prstuning is not None) and (AUC_test is not None):
+            cor = np.corrcoef(AUC_prstuning, AUC_test)[0, 1]
+            rd = abs(max(AUC_prstuning) - max(AUC_test)) / max(AUC_test)
+            print("The correlation between AUCs from PRStuning and testing data is", "{:.4g}".format(cor))
+            print("The relative difference between AUC from PRStuing and testing data is", "{:.4g}".format(rd))
