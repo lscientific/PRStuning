@@ -9,10 +9,20 @@ import math
 from scipy.stats import norm
 from sklearn.metrics import roc_auc_score
 
+def logF(x):
+    return 0 if x == 0 else math.log(x)
+
+logF = np.vectorize(logF)
+
+def nanVal(x):
+    return 0 if math.isnan(x) else x
+
+nanVal = np.vectorize(nanVal)
+
+def g_s2(x, y):
+    return 0 if np.power(y, 2) == 0 else np.sqrt(np.power(x - y, 2) / np.power(y, 2))
+
 def snpEM(z, maxIter=1000, tol=1e-4, beta0=0, info=True):
-    def logF(x):
-        return 0 if x == 0 else math.log(x)
-    logF = np.vectorize(logF)
     m = len(z)
     # initialization
     pi0_0 = 0.99
@@ -23,9 +33,6 @@ def snpEM(z, maxIter=1000, tol=1e-4, beta0=0, info=True):
     sigma2_t = sigma2_0
     h = list()
     h0 = 0
-    def nanVal(x):
-        return 0 if math.isnan(x) else x
-    nanVal = np.vectorize(nanVal)
     Qval_save = []
     for iter in range(maxIter):
         # E step
@@ -41,8 +48,6 @@ def snpEM(z, maxIter=1000, tol=1e-4, beta0=0, info=True):
             sigma2_t1 = 0
         else:
             sigma2_t1 = np.max(np.sum(h * z ** 2) / np.sum(h) - 1, 0)
-        def g_s2(x, y):
-            return 0 if np.power(y, 2) == 0 else np.sqrt(np.power(x - y, 2) / np.power(y, 2))
         if (abs(nanVal((pi0_t1 - pi0_t) / pi0_t)) < tol) & \
                 (np.sqrt(nanVal(np.sum((pi1_t1 - pi1_t) ** 2) / np.sum(np.power(pi1_t, 2)))) < tol) & \
                 (g_s2(sigma2_t1, sigma2_t) < tol):
