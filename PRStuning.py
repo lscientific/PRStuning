@@ -124,7 +124,7 @@ def main_with_args(args):
         GWEB.main(p_dict)
         print('Alignment time elapsed:', time.time() - startTime0, 's')
 
-        # PRStuning: MCMC
+        # PRStuning: SAME
         p_dict['iprefix'] = os.path.join(p_dict['dir'], 'align_')
         p_dict['align-only'] = False
         p_dict['aligned'] = True
