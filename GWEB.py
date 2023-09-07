@@ -157,11 +157,6 @@ def main(p_dict):
 
     if not p_dict['align-only']:
         p_dict['n'] = p_dict['n0'] + p_dict['n1']
-        result = None
-        pars_prstuning = None
-        pars_test = None
-        AUC_prstuning = None
-        AUC_test = None
         if 'N' in alignResult['SS'].columns:
             rawN = p_dict['n']
             N90 = np.quantile(alignResult['SS']['N'], 0.9)
@@ -232,6 +227,10 @@ def main(p_dict):
                 # Increasing penality
                 for bk in range(len(alignResult['REF']['LD'])):
                     alignResult['REF']['LD'][bk] += 0.1 * np.identity(alignResult['REF']['LD'][bk].shape[0])
+
+        result = None
+        pars_prstuning = None
+        AUC_prstuning = None
         if estResult is not None:
             estResultList.append(estResult)
             paramDF = pd.DataFrame({'pi': estResult['piEst'], 'sigma2': estResult['sigma2Est']})
@@ -268,6 +267,8 @@ def main(p_dict):
             print("Five times tried! Can't find a converged chain. Not returning PRStuning AUC")
 
         # calculate testing AUC if geno is provided
+        pars_test = None
+        AUC_test = None
         if genoObj is not None:
             phenoDF = PRSeval.phenoParser(alignResult['GENO'], phenoFile=p_dict['pheno'])
             isBinPhe = PRSeval.isBinary(phenoDF.loc[:, 'PHE'])
