@@ -134,8 +134,6 @@ def main(p_dict):
         weightObj.to_csv(os.path.join(p_dict['dir'], 'align_weight.txt'), sep='\t', index=False)
 
     if not p_dict['align-only']:
-        pars_test = None
-        AUC_test = None
         # PRStuning AUC
         z = alignResult['SS']['BETA'] / alignResult['SS']['SE']
         pi0, _, sigma2, _, _, _, Qval, _ = snpEM(z, maxIter=1000, tol=1e-4, beta0=len(z) / 100, info=False)
@@ -167,6 +165,8 @@ def main(p_dict):
         pars_prstuning = weightObj.columns[AUC_prstuning.index(max(AUC_prstuning)) + 5]
 
         # testing AUC
+        pars_test = None
+        AUC_test = None
         if genoObj is not None:
             phenoDF = PRSeval.phenoParser(alignResult['GENO'], phenoFile=p_dict['pheno'])
             isBinPhe = PRSeval.isBinary(phenoDF.loc[:, 'PHE'])
@@ -199,7 +199,7 @@ def main(p_dict):
         print("The best-performing parameter based on PRStuning:", pars_prstuning)
         if pars_test is not None:
             print("The best-performing parameter based on testing data:", pars_test)
-            
+
         if AUC_test is not None:
             cor = np.corrcoef(AUC_prstuning, AUC_test)[0, 1]
             rd = abs(max(AUC_prstuning) - max(AUC_test)) / max(AUC_test)
