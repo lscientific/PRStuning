@@ -112,13 +112,13 @@ python PRStuning.py --ssf ./simdata/ssf.txt --weight ./simdata/weight_ldpred.txt
 --pheno ./simdata/pheno.txt --geno ./simdata/geno --n0 5000 --n1 5000 --dir ./simdata/output/ --homo
 ```
 - Results \
-  	```./simdata/ref.log``` is the log file for plinkLD.py  \
 	```./simdata/output/auc_results.txt``` includes the PRStuning and testing AUC results. Each row corresponds to a PRS parameter and the two columns correspond to PRStuning AUC and testing AUC respectively  \
 	Files with prefix ```./simdata/output/align_``` are aligned datasets \
 	```./simdata/output/prs_results/``` contains PRS scoring results using PLINK \
 	```./simdata/output/param.txt``` contains the estimated parameters using SAME algorithm \
 	```./simdata/output/beta_est.txt``` contains the estimated ground truth effect sizes \
-	```./simdata/output/log.txt``` is the log file for PRStuning.py
+	```./simdata/output/log.txt``` is the log file for PRStuning.py \
+	```./simdata/ref.log``` is the log file for plinkLD.py  
 
 ### Pruning
 When ```--pruning``` is not used, the SNPs are treated as independent. Thus use EM algorithm to estimate. No reference data should be provided
