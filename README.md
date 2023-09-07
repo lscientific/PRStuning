@@ -105,8 +105,8 @@ When ```--pruning``` is not used, the SNPs are treated as dependent. Thus use Gi
 ```
 python plinkLD.py --bfile ./simdata/ref --output ./simdata/ref.h5 
 ```
-- Step 2
-  
+- Step 2 
+  \
 Use ```--homo``` here since using simulated data. For real GWAS summary statistics that are from a single homogeneous GWAS cohort, do not use this option.
 ```
 python PRStuning.py --ssf ./simdata/ssf.txt --weight ./simdata/weight_ldpred.txt --ref ./simdata/ref.h5 \
