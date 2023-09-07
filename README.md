@@ -92,7 +92,7 @@ python plinkLD.py --bfile 1000G.EUR.QC --block fourier_ls-all.bed --out LD.h5
 ## Example Demonstration:
 
 ./simdata/: Simulated data with correlated SNPs 
-- GWAS training dataset ssf.txt sample size N0=5000, N1=5000 
+- GWAS training dataset ssf.txt with sample size N0=5000, N1=5000 
 - PRS weight file weight_ldpred.txt is generated using LDpred (https://github.com/bvilhjal/ldpred). The parameters are the fractions of causal markers
 - PRS weight file weight_pt.txt only contains independent SNPs after pruning. The parameters are p-value thresholds
 - Testing genotype data ./simdata/geno(.bim/bed/fam) have 500 controls and 500 cases 
