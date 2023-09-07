@@ -185,6 +185,7 @@ def main(p_dict):
                 auc = auc if auc >= 0.5 else 1 - auc
                 AUC_test.append(auc)
                 print("Testing AUC for parameter", alignResult['WEIGHT'].columns[col], "is", auc)
+            pars_test = weightObj.columns[AUC_test.index(max(AUC_test)) + 5]
             result['Testing'] = AUC_test
 
         else:
