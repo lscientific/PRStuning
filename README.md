@@ -22,7 +22,7 @@ Special tips for installing GSL on Windows can be found at http://joonro.github.
 
 ### Install Python packages via pip:
 ```
-pip install scipy numpy pandas scikit-learn rpy2 cython matplotlib tables pysnptools CythonGSL 
+pip install scipy numpy pandas scikit-learn rpy2 cython tables pysnptools CythonGSL 
 ```
 
 ### Compilation
