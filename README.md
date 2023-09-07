@@ -77,7 +77,7 @@ python PRStuning.py --ssf SSF --weight WEIGHT --n0 N0 --n1 N1 [--pruning] [--ref
 ```--thread THREAD```  &nbsp;&nbsp;&nbsp;   Number of parallel threads, by default all CPUs will be utilized (Default: all CPUs are utilized)
 
 ## Reference Data
-The reference panel and corresponding LD matrix based on the 1000 Genomes Project are available at https://figshare.com/s/8fc8167b4b5569e53f78 \
+The reference panel and corresponding LD matrix based on the 1000 Genomes Project are available at https://figshare.com/s/8fc8167b4b5569e53f78 
 - 1000G.EUR.QC.bim&fam&bed are the 1000G dataset 
 - fourier_ls-all.bed is the SNP block file
 - ld_1kg_EUR_hm3_shrink.h5 is the LD file
