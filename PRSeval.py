@@ -7,7 +7,7 @@ import pandas as pd
 import scipy.stats as stats
 from sklearn import linear_model, metrics
 import compare_auc_delong_xu
-import matplotlib.pyplot as plt
+#import matplotlib.pyplot as plt
 import warnings
 from PRScoring import getIndIndex
 
@@ -26,7 +26,6 @@ def indParser(indFile, dataCol=None, FID='FID', IID='IID', skip=0, defaultCol='S
     except:
         print('Unable to read file:', indFile)
         return
-        
     if (FID in header) and (IID in header): 
         #header exists
         if dataCol is None:
@@ -52,7 +51,6 @@ def indParser(indFile, dataCol=None, FID='FID', IID='IID', skip=0, defaultCol='S
         else:
             print('Invalid value of dataCol, it should be either an integer/List/None(Default)')
             return
-
         try:
             dataDF = pd.read_table(indFile, sep='\t|\s+', skiprows=skip, engine='python', comment=comment)
         except:
@@ -77,7 +75,6 @@ def indParser(indFile, dataCol=None, FID='FID', IID='IID', skip=0, defaultCol='S
         else:
             print('Invalid value of dataCol, it should be either an integer/List/None(Default)')
             return
-
         try:
             dataDF = pd.read_table(indFile, sep='\t|\s+', header=None, skiprows=skip, engine='python', comment=comment)
         except:
@@ -86,7 +83,6 @@ def indParser(indFile, dataCol=None, FID='FID', IID='IID', skip=0, defaultCol='S
         dataDF.columns = dataDF.columns.astype(str)
         dataDF.columns.values[0] = 'FID'
         dataDF.columns.values[1] = 'IID'
-
     dataColIdx = [dataDF.columns.get_loc('FID'), dataDF.columns.get_loc('IID')]+[ii for a,ii in enumerate(dataColIdx) if ii not in dataColIdx[:a]]#list(set(dataColIdx))
     dataDF = dataDF.iloc[:, dataColIdx].copy()
     return dataDF
@@ -100,6 +96,7 @@ def phenoParser(genoObj=None, phenoFile=None, PHE='PHE', mpheno=1, missing=-9, F
         phenoDF = phenoDF.iloc[np.arange(len(phenoDF))[phenoDF.iloc[:,2]!=missing],0:3]
         if genoObj is not None:
             idx, pos=strUtils.listInDict(getIndIndex(genoObj['INDINFO']), pd.Series(range(len(phenoDF)), index=getIndIndex(phenoDF)))
+            pos = pos.flatten('F')
             phenoDF = phenoDF.iloc[pos, :].reset_index(drop=True).copy()
     else:
         phenoDF = None
@@ -188,16 +185,16 @@ def auc(phe, sc, figname=None, fmt='o-r', **kwargs):
     ci[ci < 0] = 0
     ci[ci > 1] = 1
 
-    fpr, tpr, thresholds = metrics.roc_curve(phe, sc)
-    fig, ax = plt.subplots()
-    ax.set_xlabel("False positive rate")
-    ax.set_ylabel("True positive rate")
-    ax.set_title("Receiver operating characteristic (ROC) curve")
-    ax.plot(fpr, tpr, fmt, **kwargs)
-    x_vals = np.array(ax.get_xlim())
-    ax.plot(x_vals, x_vals, '--')
-    if figname is not None:
-        fig.savefig(figname)
+    #fpr, tpr, thresholds = metrics.roc_curve(phe, sc)
+    #fig, ax = plt.subplots()
+    #ax.set_xlabel("False positive rate")
+    #ax.set_ylabel("True positive rate")
+    #ax.set_title("Receiver operating characteristic (ROC) curve")
+    #ax.plot(fpr, tpr, fmt, **kwargs)
+    #x_vals = np.array(ax.get_xlim())
+    #ax.plot(x_vals, x_vals, '--')
+    #if figname is not None:
+    #    fig.savefig(figname)
     return({'auc':aucVal2, 'se':se, 'ci': ci, 'auc1':aucVal1,'fig': fig, 'ax': ax})
 
 def se_rsq(r2, n):
@@ -243,55 +240,4 @@ def rsq(phe, prs, covData=None):
     # if lo<0: lo = 0
     # if hi>1: hi = 1
     return(r2df)
-    
-def strataPlot(phe, sc, strata=9, bins=None, tail=True, figname=None, fmt='o-r', **kwargs):
-    if bins is None:
-        if tail:
-            bins = 100*np.concatenate(([0], np.linspace(0.05, 0.95, strata+1), [1]))
-        else:
-            bins = 100*np.linspace(0, 1, strata+1)
-    
-    binNum = len(bins)-1
-    label = np.digitize(sc, np.percentile(sc, bins), right=True)
-    fig, ax = plt.subplots()
-    if isBinary(phe):
-        midBinIdx = np.digitize(50, bins, right=True)-1
-        n0 = np.array([np.sum(phe[label==(i+1)]==0) for i in range(binNum) ])
-        n1 = np.array([np.sum(phe[label==(i+1)]==1) for i in range(binNum) ])
-        with warnings.catch_warnings():
-            warnings.filterwarnings("ignore")
-            odds = n1/n0
-            y = odds/odds[midBinIdx] #Odds Ratio
-            se_logOR = np.sqrt(1/n1+1/n0+1/n1[midBinIdx]+1/n0[midBinIdx])
-            se_logOR[midBinIdx] = 0.
-            y_ul = np.exp(np.log(y)+1.96*se_logOR)
-            y_ll = np.exp(np.log(y)-1.96*se_logOR)
-        ax.set_ylabel("Odds Ratio for Score on Phenotype")
-    else:
-        midBinIdx = np.digitize(50, bins, right=True)-1
-        y = np.array([np.mean(phe[label==(i+1)]) for i in range(binNum) ])
-        y_ul = np.array([np.quantile(phe[label==(i+1)], 0.975) for i in range(binNum) ])
-        y_ll = np.array([np.quantile(phe[label==(i+1)], 0.025) for i in range(binNum) ])
-        baseY = y[midBinIdx]
-        # baseY_ul = y_ul[0]
-        # baseY_ll = y_ll[0]
-        y = y-baseY
-        y_ul = y_ul-baseY
-        y_ll = y_ll-baseY
-        # y_ul[0] = 0
-        # y_ll[0] = 0
-        ax.set_ylabel("Average Phenotype")
-    
-    x = np.array([(bins[i]+bins[i+1])/2 for i in range(binNum) ])
-    ax.set_xlabel("Percentile for Risk Score (%)")
-    ax.set_title("Strata Plot of Risk Score")
-    ax.set_xticks(x)
-    binsInt = np.round(bins).astype(int)
-    xlabel = ['[0,'+str(binsInt[1])+']'] +['('+str(binsInt[i+1])+','+str(binsInt[i+2])+']' for i in range(binNum-1)]
-    ax.set_xticklabels(xlabel, rotation=45)
-    fig.subplots_adjust(bottom=0.2)
-    ax.errorbar(x, y, np.vstack((y-y_ll, y_ul-y)), fmt=fmt, capsize=5, **kwargs)
-
-    if figname is not None:
-        fig.savefig(figname)
-    return fig, ax
+  
