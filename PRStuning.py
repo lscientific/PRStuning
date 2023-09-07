@@ -77,9 +77,6 @@ parser.add_argument('--pheno', type=str, default=None, required=('--geno' in sys
                     help="External phenotype file. Should be provided if geno. "
                         "Should be a tabular text file. If header is not provided, the first, second columns and third columns should be FID, IID, and PHE. Otherwise, there are three columns named 'FID', 'IID' and 'PHE'")
 
-parser.add_argument('--aligned', default=False, action='store_true',
-                    help='Whether the ssf, weight, (geno, ref) files are aligned. Do not use aligned for real data')
-
 parser.add_argument('--dir', type=str, default='./output', required=False,
                     help='Output directory')
 
