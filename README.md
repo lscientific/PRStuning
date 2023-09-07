@@ -85,7 +85,7 @@ Generate the LD matrix file using ```plinkLD.py```
 python plinkLD.py --bfile 1000G.EUR.QC --block fourier_ls-all.bed --out LD.h5
 ```
 
-The LD matrix file for European 1000 Genomes data is available [here]()
+For European 1000 Genomes data, the LD matrix file is already available [here](https://figshare.com/s/648d346f8092c5c71685)
 - ld_1kg_EUR_hm3_shrink.h5 is the LD matrix file
   
 
