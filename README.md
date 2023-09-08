@@ -91,7 +91,7 @@ For European data, the LD matrix file is already available [here](https://figsha
   
 
 
-## Example Demonstration:
+## Example Demonstration
 
 ./simdata/: Simulated data with correlated SNPs 
 - GWAS training dataset ssf.txt with sample size N0=5000, N1=5000 
