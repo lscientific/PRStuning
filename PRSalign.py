@@ -3,12 +3,13 @@ Align summary stats, annotation, genotype, and reference panel into the same coo
 
 @Author: Wei Jiang(w.jiang@yale.edu)
 '''
-import strUtils
+from GWEB import strUtils
 import numpy as np
 import copy
 import multiprocessing
 import warnings
 import pandas as pd
+from GWEB.ldsc import ldscore, ldscoreAnno
 
 compAllele = {'a':'t','g':'c','t':'a','c':'g'}
 
@@ -135,9 +136,11 @@ def selectSS(ssDF, idx):
 def selectGeno(genoObj, idx):
     if isPdNan(genoObj['GENOTYPE']):
         gt = np.nan
+        flipInfo = np.nan
     else:
         gt = genoObj['GENOTYPE'][:,idx]
-    return({'SNPINFO':genoObj['SNPINFO'].iloc[idx,:].reset_index(drop=True).copy(),'INDINFO':genoObj['INDINFO'].copy(),'GENOTYPE':gt,'FLIPINFO':genoObj['FLIPINFO'][idx].copy()})
+        flipInfo = genoObj['FLIPINFO'][idx].copy()
+    return({'SNPINFO':genoObj['SNPINFO'].iloc[idx,:].reset_index(drop=True).copy(),'INDINFO':genoObj['INDINFO'].copy(),'GENOTYPE':gt,'FLIPINFO':flipInfo})
 
 def selectAnno(annoObj, idx):
     return({'SNPINFO':annoObj['SNPINFO'].iloc[idx,:].reset_index(drop=True).copy(),'ANNODATA':annoObj['ANNODATA'].iloc[idx,:].reset_index(drop=True).copy()})
@@ -1098,7 +1101,6 @@ def alignSmryGeno2RefStore(ssObj, genoObj, refStore, outRefStore, annoObj=None, 
     return({'SS': result['SS'][0], 'GENO': result['GENO'][0],'REF': result['REF'][0], 'ANNO': result['ANNO']})
       
 def updateLDSC(refObj):
-    from ldsc import ldscore, ldscoreAnno
     newRefObj = copy.deepcopy(refObj)
     for i in range(len(refObj['BID'])):
         tmpLdscVal = ldscore(refObj['LD'][i], refObj['INDNUM'])
@@ -1106,7 +1108,6 @@ def updateLDSC(refObj):
     return(newRefObj)
 
 def getAnnoLDSC(refObj, annoObj):
-    from ldsc import ldscoreAnno
     start = 0
     ldscMatList = []
     for i in range(len(refObj['BID'])):
