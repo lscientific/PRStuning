@@ -111,8 +111,7 @@ python plinkLD.py --bfile ./simdata/ref --output ./simdata/ref.h5
   \
 Use ```--homo``` here since using simulated data. For real GWAS summary statistics that are from a single homogeneous GWAS cohort, do not use this option.
 ```
-python PRStuning.py --ssf ./simdata/ssf.txt --weight ./simdata/weight_ldpred.txt --ref ./simdata/ref.h5 \
---pheno ./simdata/pheno.txt --geno ./simdata/geno --n0 5000 --n1 5000 --dir ./simdata/output/ --homo
+python PRStuning.py --ssf ./simdata/ssf.txt --weight ./simdata/weight_ldpred.txt --ref ./simdata/ref.h5 --pheno ./simdata/pheno.txt --geno ./simdata/geno --n0 5000 --n1 5000 --dir ./simdata/output/ --homo
 ```
 - Results \
 	```./simdata/output/auc_results.txt``` includes the PRStuning and testing AUC results. Each row corresponds to a PRS parameter and the two columns correspond to PRStuning AUC and testing AUC respectively  \
