@@ -123,7 +123,7 @@ python PRStuning.py --ssf ./simdata/ssf.txt --weight ./simdata/weight_ldpred.txt
 	```./simdata/ref.log``` is the log file for plinkLD.py  
 
 ### Pruning
-When ```--pruning``` is not used, the SNPs are treated as independent. Thus use EM algorithm to estimate. No reference data should be provided
+When ```--pruning``` is used, the SNPs are treated as independent. Thus use EM algorithm to estimate. No reference data should be provided
 ```
 python PRStuning.py --ssf ./simdata/ssf.txt --weight ./simdata/weight_pt.txt --pheno ./simdata/pheno.txt --geno ./simdata/geno --n1 5000 --n0 5000 --dir ./simdata/output_pt/ --pruning 
 ```
