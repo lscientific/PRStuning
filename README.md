@@ -33,7 +33,7 @@ python setup.py build_ext --inplace
 Installation is expected to be finished within a few minutes
 
 ## Typical Workflow:
-- (Optional) Use ```plinkLD.py``` to calculate the LD matrix for PLINK binary format encoded genotype data of a reference panel.
+- (Optional) Use ```plinkLD.py``` to calculate the LD matrix for PLINK or Oxford binary format genotype data of a reference panel.
   See ```python plinkLD.py --help``` for further usage description and options
 
 - Use ```PRStuning.py``` to obtain estimated AUC using GWAS summary statistics from the training data. 
@@ -106,6 +106,8 @@ For European data, the LD matrix file is already available [here](https://figsha
 ### Not pruning
 When ```--pruning``` is not used, the SNPs are treated as dependent. Thus use Gibbs sampling-based SAME algorithm to estimate.
 - Step 1
+  \
+Use ```plinkLD.py``` to generate the reference LD file
 ```
 python plinkLD.py --bfile ./simdata/ref --output ./simdata/ref.h5 
 ```
