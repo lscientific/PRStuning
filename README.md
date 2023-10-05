@@ -82,7 +82,7 @@ The reference panel based on the 1000 Genomes Project is available [here](https:
 - 1000G.EUR.QC.bim&fam&bed are the 1000G plink files
 - fourier_ls-all.bed is the SNP block file
   
-Generate the LD matrix file using ```plinkLD.py```
+Generate the reference LD matrix file using ```plinkLD.py```
 ```
 python plinkLD.py --bfile 1000G.EUR.QC --block fourier_ls-all.bed --out LD.h5
 ```
@@ -107,7 +107,7 @@ For European data, the LD matrix file is already available [here](https://figsha
 When ```--pruning``` is not used, the SNPs are treated as dependent. Thus use Gibbs sampling-based SAME algorithm to estimate.
 - Step 1
   \
-Use ```plinkLD.py``` to generate the reference LD file
+Use ```plinkLD.py``` to generate the reference LD matrix file
 ```
 python plinkLD.py --bfile ./simdata/ref --output ./simdata/ref.h5 
 ```
