@@ -12,6 +12,7 @@ import logger
 import multiprocessing
 from sklearn.covariance import ledoit_wolf
 import plink2SnpReader
+import bgen_reader
 import pandas as pd
 # from ldsc import ldscore
 
@@ -71,6 +72,7 @@ def main_with_args(args):
 --bed: Binary data file (Genotypes; Default: test.bed)
 --bim: Binary data file (SNP info; Default: test.bim)
 --fam: Binary data file (Individual info; Default: test.fam)
+--bgen: Binary data file with Oxford format for getting dosages
 --block: Block file (By default, all SNPs are in one block)
 --snplist: SNP list file (By default, all SNP pairs are calculated)
 --output: output filename (Default: LD.h5)
@@ -81,7 +83,7 @@ def main_with_args(args):
 --help: Help
 ======================================'''
         
-    arg={'--bfile':None,'--bed':'test.bed','--bim':'test.bim','--fam':'test.fam',\
+    arg={'--bfile':None,'--bed':'test.bed','--bim':'test.bim','--fam':'test.fam','--bgen':None,\
         '--block':None,'--snplist':None, '--output':'LD.h5','--log': 'plinkLD.log',\
         '--thread':multiprocessing.cpu_count(), '--method':'Pearson', '--compress': 9}
     
@@ -118,15 +120,27 @@ def main_with_args(args):
         arg['--bed']=arg['--bfile']+'.bed'
         arg['--bim']=arg['--bfile']+'.bim'
         arg['--fam']=arg['--bfile']+'.fam'
+    
+    useDosage = False
+    if arg['--bgen']!=None:
+        bgen = bgen_reader.read_bgen(arg['--bgen'], verbose=False)
+        useDosage = True        
 
     print('Start loading SNP information...')
-    try:
-        #with open(arg['--bim'],'r') as f:
-        #snpInfo = [i.strip() for i in f.readlines() if len(i.strip())!=0]
-        snpInfo = pd.read_table(arg['--bim'], sep='\s+', names=['CHR','SNP','GD','BP','A1','A2'], dtype={'SNP':str,'CHR':str,'A1':str,'A2':str})
-    except:
-        print("Could not read SNP Info file:", arg['--bim'])
-        exit()
+    if useDosage:
+        variants = bgen["variants"]
+        pattern = re.compile(r'(\w+),(\w+)')
+        vmatch1 = np.vectorize(lambda x:pattern.match(x).group(1))
+        vmatch2 = np.vectorize(lambda x:pattern.match(x).group(2))
+        snpInfo = pd.DataFrame({'CHR':variants['chrom'],'SNP':variants['rsid'],'GD':0, 'BP':variants['pos'],'A1':vmatch1(variants['allele_ids']),'A2':vmatch2(variants['allele_ids'])})
+    else:
+        try:
+            #with open(arg['--bim'],'r') as f:
+            #snpInfo = [i.strip() for i in f.readlines() if len(i.strip())!=0]
+            snpInfo = pd.read_table(arg['--bim'], sep='\s+', names=['CHR','SNP','GD','BP','A1','A2'], dtype={'SNP':str,'CHR':str,'A1':str,'A2':str})
+        except:
+            print("Could not read SNP Info file:", arg['--bim'])
+            exit()
   
     snpNum = len(snpInfo)
     print(snpNum,'SNPs.')
@@ -163,12 +177,15 @@ def main_with_args(args):
     chSet = list(set(ch))
 
     print('Start loading individual information...')
-    try:
-        with open(arg['--fam'],'r') as f:
-            indInfo = [i.strip() for i in f.readlines() if len(i.strip())!=0]  
-    except IOError:
-        print("Could not read Individual Info file:", arg['--fam'])
-        exit()
+    if useDosage:
+        indInfo = bgen['samples'].to_list()
+    else:
+        try:
+            with open(arg['--fam'],'r') as f:
+                indInfo = [i.strip() for i in f.readlines() if len(i.strip())!=0]  
+        except IOError:
+            print("Could not read Individual Info file:", arg['--fam'])
+            exit()
   
     indNum = len(indInfo)
     print(indNum,'individuals.')
@@ -239,7 +256,15 @@ def main_with_args(args):
         exit()
 
     print('Reading BED file...')
-    genotype = plink2SnpReader.getSnpReader(bed=arg['--bed'], bim=arg['--bim'], fam=arg['--fam'], thread= threadNum)
+    if useDosage:
+        genotype = np.zeros((indNum, snpNum))
+        for variant_idx in range(snpNum):
+            e = bgen_reader.allele_expectation(bgen, variant_idx)
+            alt_allele_idx = 1
+            d = bgen_reader.compute_dosage(e, alt=alt_allele_idx)
+            genotype[:,variant_idx] = d
+    else:
+        genotype = plink2SnpReader.getSnpReader(bed=arg['--bed'], bim=arg['--bim'], fam=arg['--fam'], thread= threadNum)
 
     print('Start LD calculation...')
 
@@ -272,7 +297,11 @@ def main_with_args(args):
             continue
         print('Block '+ str(i)+ ' : '+str(len(idx))+ ' SNPs [Calculating LD ...]') #\r
         totalSNPnum += len(idx)
-        blockGenotype = genotype[:,idx].read(dtype='float32').val
+        if useDosage:
+            blockGenotype = genotype[:,idx]
+        else:
+            blockGenotype = genotype[:,idx].read(dtype='float32').val
+            blockGenotype[blockGenotype==-127] = np.nan #3
         blockSNPinfo = snpInfo.iloc[idx]
         #blockSNPinfo = pd.DataFrame({'ch': [ch[j] for j in idx], 
             #'id':[snpID[j] for j in idx], 
