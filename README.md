@@ -51,6 +51,7 @@ python plinkLD.py --bfile BFILE [--bed BED] [--bim BIM] [--fam FAM] [--block: BL
 ```--bed: BIM```   &nbsp;&nbsp;&nbsp;         Binary data file (Genotypes) \
 ```--bim: BIM```   &nbsp;&nbsp;&nbsp;         Binary data file (SNP info) \
 ```--fam: FAM```   &nbsp;&nbsp;&nbsp;         Binary data file (Individual info) \
+```--bgen: BGEN```   &nbsp;&nbsp;&nbsp;       Binary data file with Oxford format for getting dosages \
 ```--block: BLOCK_FILE``` &nbsp;&nbsp;&nbsp;  Block file (Default: all SNPs are in one block) \
 ```--snplist: SNPLIST``` &nbsp;&nbsp;&nbsp;    SNP list file (Default: all SNP pairs are calculated) \
 ```--output: OUTPUT``` &nbsp;&nbsp;&nbsp;      Output filename (Default: LD.h5) \
@@ -85,6 +86,7 @@ Generate the LD matrix file using ```plinkLD.py```
 ```
 python plinkLD.py --bfile 1000G.EUR.QC --block fourier_ls-all.bed --out LD.h5
 ```
+Note that binary data file with Oxford format (bgen file) can be an alternative to the PLINK file
 
 For European data, the LD matrix file is already available [here](https://figshare.com/s/648d346f8092c5c71685)
 - ld_1kg_EUR_hm3_shrink.h5 is the LD matrix file
