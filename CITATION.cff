@@ -1,0 +1,15 @@
+cff-version: 0.0.1
+message: "If you use this software, please cite it as below."
+authors:
+  - family-names: Jiang
+    given-names: Wei
+  - family-names: Chen
+    given-names: Ling
+  - family-names: Girgenti
+    given-names: Matthew
+  - family-names: Zhao
+    given-names: Hongyu
+title: "Tuning Parameters for Polygenic Risk Score Methods Using GWAS Summary Statistics from Training Data"
+version: 0.0.1
+doi: 10.5281/zenodo.10119783
+date-released: 2023-11-13
