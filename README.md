@@ -2,7 +2,7 @@
 
 - To use the codes, please cite https://www.nature.com/articles/s41467-023-44009-0
 
-Software dependency: Python version: >=3.8; R; PLINK; GSL (optional for speedup) \
+- Software dependency: Python version: >=3.8; R; PLINK; GSL (optional for speedup) \
 Python package dependency: numpy; pandas; scipy; scikit-learn;	rpy2; cython; tables; pysnptools; CythonGSL; bgen-reader
 
 ## Installation and Compilation
